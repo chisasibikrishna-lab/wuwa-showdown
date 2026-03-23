@@ -2,6 +2,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { LogOut, User as UserIcon } from "lucide-react";
 
 interface NavItemProps {
   label: string;
@@ -61,10 +63,11 @@ const navItems = [
 
 export default function TopNavbar() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   return (
     <div className="w-full flex justify-start z-50 fixed top-0 left-0 right-0 pointer-events-none">
-      <div className="relative h-14 w-full max-w-[912px] pointer-events-auto">
+      <div className="relative h-14 w-full max-w-[1200px] pointer-events-auto">
         {/* Glassmorphism Background with Slanted Right Edge */}
         <div
           className="absolute inset-0 bg-[#161922]/90 backdrop-blur-md border-t border-b border-white/[0.04]"
@@ -87,11 +90,31 @@ export default function TopNavbar() {
             </h1>
           </div>
 
-          {/* Right Side: Navigation Items */}
-          <div className="flex h-full">
-            {navItems.map((item) => (
-              <NavItem key={item.label} label={item.label} href={item.href} isActive={pathname === item.href} />
-            ))}
+          {/* Right Side: Navigation Items & Auth */}
+          <div className="flex flex-1 h-full items-center justify-between">
+            <div className="flex h-full">
+              {navItems.map((item) => (
+                <NavItem key={item.label} label={item.label} href={item.href} isActive={pathname === item.href} />
+              ))}
+            </div>
+
+            <div className="flex items-center pl-4 border-l border-white/10 h-8 ml-auto pointer-events-auto">
+               {user ? (
+                 <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2">
+                       <img src={user.avatar} className="w-6 h-6 rounded-full border border-white/20 shadow-inner" />
+                       <span className="text-white font-bold tracking-widest text-[13px] uppercase" style={{ fontFamily: "'Rajdhani', sans-serif" }}>{user.name}</span>
+                    </div>
+                    <button onClick={logout} className="text-white/40 hover:text-red-400 transition-colors flex items-center gap-1 text-[11px] uppercase font-bold tracking-widest" title="Logout">
+                       <LogOut size={14} />
+                    </button>
+                 </div>
+               ) : (
+                 <Link href="/login" className="text-[#ffcc00] border border-[#ffcc00]/50 hover:bg-[#ffcc00]/10 px-3 py-1 rounded transition-all flex items-center gap-2 text-[12px] uppercase font-bold tracking-widest" style={{ fontFamily: "'Rajdhani', sans-serif" }}>
+                    <UserIcon size={14} /> Login
+                 </Link>
+               )}
+            </div>
           </div>
         </div>
       </div>

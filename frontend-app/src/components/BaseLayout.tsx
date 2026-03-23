@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import TopNavbar from "./TopNavbar";
 
 interface BaseLayoutProps {
@@ -8,6 +9,8 @@ interface BaseLayoutProps {
 
 export default function BaseLayout({ children }: BaseLayoutProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const pathname = usePathname();
+  const isAuthPage = pathname === "/login" || pathname === "/register";
 
   const handleMouseMove = (e: React.MouseEvent) => {
     setMousePos({ x: e.clientX, y: e.clientY });
@@ -41,11 +44,11 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
       {/* Subtle ambient glow behind the panel */}
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Top Navbar */}
-      <TopNavbar />
+      {/* Conditionally Render Top Navbar */}
+      {!isAuthPage && <TopNavbar />}
 
       {/* Main Content Area */}
-      <div className="relative z-10 w-full flex-grow pt-32 pb-16 flex justify-center px-4">{children}</div>
+      <div className="relative z-10 w-full flex-grow flex justify-center ">{children}</div>
     </div>
   );
 }

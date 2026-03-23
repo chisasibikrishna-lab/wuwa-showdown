@@ -31,6 +31,8 @@ const PodiumAvatar: React.FC<PodiumAvatarProps> = ({ player, rank, color, delay 
   );
 };
 
+import { RefreshCw } from "lucide-react";
+
 export default function LeaderboardPage() {
   const { players } = useTournament();
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
@@ -40,9 +42,21 @@ export default function LeaderboardPage() {
   const top3 = sortedPlayers[2];
   const others = sortedPlayers.slice(3);
 
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="absolute inset-0 z-10 flex flex-col items-center pt-[100px] sm:pt-[120px] pb-4 px-4 overflow-hidden pointer-events-none">
-      <div className="w-full max-w-[1000px] flex flex-col items-center h-full pointer-events-auto">
+      <div className="w-full max-w-[1000px] flex flex-col items-center h-full pointer-events-auto relative">
+        <button 
+          onClick={handleRefresh}
+          className="absolute top-0 right-0 z-50 flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-4 py-2 rounded-lg transition-colors font-bold tracking-widest text-xs uppercase"
+          style={{ fontFamily: "'Rajdhani', sans-serif" }}
+        >
+          <RefreshCw size={14} /> Refresh
+        </button>
+
         {/* Fixed Header Content */}
         <div className="w-full flex flex-col items-center shrink-0">
           {/* Title */}
