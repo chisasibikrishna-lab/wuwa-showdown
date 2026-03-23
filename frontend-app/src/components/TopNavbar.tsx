@@ -54,6 +54,8 @@ const NavItem: React.FC<NavItemProps> = ({ label, href, isActive }) => {
 const navItems = [
   { label: "HOME", href: "/" },
   { label: "LEADERBOARD", href: "/leaderboard" },
+  { label: "MAP", href: "/map" },
+  { label: "ARENA", href: "/arena" },
   { label: "ADMIN", href: "/admin" },
 ];
 
@@ -61,8 +63,8 @@ export default function TopNavbar() {
   const pathname = usePathname();
 
   return (
-    <div className="w-full flex justify-start pl-0 pt-8 z-50 fixed top-0 left-0 right-0 pointer-events-none">
-      <div className="relative h-14 w-full max-w-[703px] pointer-events-auto">
+    <div className="w-full flex justify-start z-50 fixed top-0 left-0 right-0 pointer-events-none">
+      <div className="relative h-14 w-full max-w-[912px] pointer-events-auto">
         {/* Glassmorphism Background with Slanted Right Edge */}
         <div
           className="absolute inset-0 bg-[#161922]/90 backdrop-blur-md border-t border-b border-white/[0.04]"

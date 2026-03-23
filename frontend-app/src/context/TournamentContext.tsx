@@ -8,6 +8,13 @@ export interface Player {
   avatar: string;
 }
 
+export interface GeoguessEvent {
+  active: boolean;
+  image: string | null;
+  targetCoords: [number, number] | null;
+  submittedPlayers: number[];
+}
+
 interface TournamentContextValue {
   players: Player[];
   setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
@@ -16,6 +23,12 @@ interface TournamentContextValue {
   kickPlayer: (playerId: number) => void;
   addPlayer: (name: string) => void;
   resetLeaderboard: () => void;
+  
+  // Geoguess Logic
+  geoguessEvent: GeoguessEvent | null;
+  startGeoguessEvent: (image: string, targetCoords: [number, number]) => void;
+  endGeoguessEvent: () => void;
+  submitGeoguess: (playerId: number, guessedCoords: [number, number]) => { points: number; distance: number } | void;
 }
 
 const TournamentContext = createContext<TournamentContextValue | null>(null);
@@ -35,6 +48,7 @@ const DEFAULT_PLAYERS: Player[] = [
 
 export function TournamentProvider({ children }: { children: ReactNode }) {
   const [players, setPlayers] = useState<Player[]>(DEFAULT_PLAYERS);
+  const [geoguessEvent, setGeoguessEvent] = useState<GeoguessEvent | null>(null);
 
   // Load from local storage on mount
   useEffect(() => {
@@ -46,12 +60,29 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
         console.error("Failed to load players");
       }
     }
+    
+    const savedEvent = localStorage.getItem("wuwa_tournament_geoguess");
+    if (savedEvent) {
+      try {
+        setGeoguessEvent(JSON.parse(savedEvent));
+      } catch {
+        console.error("Failed to load geoguess event");
+      }
+    }
   }, []);
 
   // Save to local storage on change
   useEffect(() => {
     localStorage.setItem("wuwa_tournament_players", JSON.stringify(players));
   }, [players]);
+
+  useEffect(() => {
+    if (geoguessEvent) {
+      localStorage.setItem("wuwa_tournament_geoguess", JSON.stringify(geoguessEvent));
+    } else {
+      localStorage.removeItem("wuwa_tournament_geoguess");
+    }
+  }, [geoguessEvent]);
 
   const addPoints = (playerId: number, points: number) => {
     setPlayers((prev) => prev.map((p) => (p.id === playerId ? { ...p, score: p.score + points } : p)));
@@ -76,9 +107,43 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
     setPlayers((prev) => prev.map((p) => ({ ...p, score: 0 })));
   };
 
+  const startGeoguessEvent = (image: string, targetCoords: [number, number]) => {
+    setGeoguessEvent({ active: true, image, targetCoords, submittedPlayers: [] });
+  };
+
+  const endGeoguessEvent = () => {
+    setGeoguessEvent(null);
+  };
+
+  const submitGeoguess = (playerId: number, guessedCoords: [number, number]) => {
+    if (!geoguessEvent || !geoguessEvent.targetCoords) return;
+    
+    // Euclidean distance 
+    const dx = geoguessEvent.targetCoords[0] - guessedCoords[0];
+    const dy = geoguessEvent.targetCoords[1] - guessedCoords[1];
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    let points = 0;
+    if (distance <= 50) points = 15;
+    else if (distance <= 150) points = 10;
+    else if (distance <= 300) points = 5;
+    else points = 1; // Participation points
+
+    addPoints(playerId, points);
+
+    setGeoguessEvent((prev) => 
+      prev ? { ...prev, submittedPlayers: [...prev.submittedPlayers, playerId] } : null
+    );
+
+    return { points, distance };
+  };
+
   return (
     <TournamentContext.Provider
-      value={{ players, setPlayers, addPoints, removePoints, kickPlayer, addPlayer, resetLeaderboard }}
+      value={{ 
+        players, setPlayers, addPoints, removePoints, kickPlayer, addPlayer, resetLeaderboard,
+        geoguessEvent, startGeoguessEvent, endGeoguessEvent, submitGeoguess
+      }}
     >
       {children}
     </TournamentContext.Provider>

@@ -11,7 +11,7 @@ export default function Home() {
       {/* Main Content Area */}
       <div className="relative z-10 flex flex-col items-center gap-12 mt-12">
         {/* Title / Emblem space */}
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 overflow-visible">
           <h2
             className="text-white text-[16px] xl:text-[20px] tracking-[0.4em] uppercase text-white/60"
             style={{ fontFamily: "'Rajdhani', sans-serif" }}
@@ -19,7 +19,7 @@ export default function Home() {
             Welcome to the Arena
           </h2>
           <h1
-            className="text-white text-[70px] xl:text-[100px] italic uppercase leading-none drop-shadow-[0_0_25px_rgba(255,204,0,0.3)]"
+            className="text-white text-[70px] xl:text-[100px] italic uppercase leading-none drop-shadow-[0_0_25px_rgba(255,204,0,0.3)] px-8 overflow-visible"
             style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.05em" }}
           >
             Ultimate{" "}
