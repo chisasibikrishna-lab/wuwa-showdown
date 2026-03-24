@@ -113,7 +113,7 @@ io.on("connection", async (socket: Socket) => {
     broadcastState();
   });
 
-  socket.on("DELETE_ROOM", async (roomId: string) => {
+  socket.on("FINALIZE_ROOM", async (roomId: string) => {
     if (socket.data.user?.role !== "admin") return;
     // Persist the room before deleting from memory
     const room = await gameManager.getRoomById(roomId);

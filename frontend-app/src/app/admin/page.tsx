@@ -11,7 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
-  const { rooms, createRoom, deleteRoom } = useTournament();
+  const { rooms, createRoom, finalizeRoom } = useTournament();
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [newRoomName, setNewRoomName] = useState("");
   const { user, isLoading } = useAuth();
@@ -74,7 +74,7 @@ export default function AdminPage() {
               <div>
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-white font-semibold text-xl tracking-tight truncate pr-4">{room.name}</h3>
-                  <button onClick={() => deleteRoom(room.id)} className="text-white/15 hover:text-red-400 transition-colors p-1.5 rounded-lg hover:bg-red-500/10 shrink-0" title="Delete Room"><Trash2 size={15} /></button>
+                  <button onClick={() => finalizeRoom(room.id)} className="bg-white/[0.04] hover:bg-[#ffcc00] border border-white/[0.08] hover:border-[#ffcc00] px-3 py-1.5 rounded-lg text-white/50 hover:text-black font-semibold tracking-wide text-[10px] sm:text-xs transition-all duration-200 shrink-0 uppercase" title="End and Save Room">Finalize Room</button>
                 </div>
                 <div className="text-white/30 text-xs mb-0.5">Created by: <span className="text-white/50">{room.creator}</span></div>
                 <div className="text-white/30 text-xs">{new Date(room.createdAt).toLocaleString()}</div>
@@ -104,7 +104,7 @@ export default function AdminPage() {
 }
 
 function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }) {
-  const { launchChallenge, endChallenge, clearActiveChallenge, kickPlayerFromRoom, admitPlayer, admitAllPlayers } = useTournament();
+  const { finalizeRoom, launchChallenge, endChallenge, clearActiveChallenge, kickPlayerFromRoom, admitPlayer, admitAllPlayers } = useTournament();
   const [activeTab, setActiveTab] = useState<"points" | "challenges">("challenges");
   const [previousRanking, setPreviousRanking] = useState<RoomPlayer[]>([]);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
@@ -170,6 +170,13 @@ function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }
             </div>
           </div>
         </div>
+        
+        <button 
+          onClick={() => { finalizeRoom(room.id); onBack(); }}
+          className="mt-4 md:mt-0 flex items-center gap-2 bg-[#ffcc00]/10 hover:bg-[#ffcc00] border border-[#ffcc00]/30 hover:border-[#ffcc00] px-5 py-2.5 rounded-xl text-[#ffcc00] hover:text-black font-semibold tracking-wide text-xs transition-all duration-300 uppercase shadow-[0_0_15px_rgba(255,204,0,0.1)] hover:shadow-[0_0_20px_rgba(255,204,0,0.4)] shrink-0"
+        >
+          Finalize Room
+        </button>
       </div>
 
       {/* Tabs */}

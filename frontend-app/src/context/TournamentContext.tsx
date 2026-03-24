@@ -57,7 +57,7 @@ interface TournamentContextValue {
   rooms: Room[];
   createRoom: (name: string, creator: string) => void;
   joinRoom: (roomCode: string, player: Player) => void;
-  deleteRoom: (roomId: string) => void;
+  finalizeRoom: (roomId: string) => void;
   kickPlayerFromRoom: (roomId: string, playerId: number | string) => void;
   admitPlayer: (roomId: string, playerId: number | string) => void;
   admitAllPlayers: (roomId: string) => void;
@@ -130,7 +130,7 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
   const kickPlayer = (playerId: number) => socket?.emit("KICK_PLAYER", playerId);
   const createRoom = (name: string, creator: string) => socket?.emit("CREATE_ROOM", { name, creator });
   const joinRoom = (roomCode: string, player: Player) => socket?.emit("JOIN_ROOM", { roomCode, player });
-  const deleteRoom = (roomId: string) => socket?.emit("DELETE_ROOM", roomId);
+  const finalizeRoom = (roomId: string) => socket?.emit("FINALIZE_ROOM", roomId);
   const kickPlayerFromRoom = (roomId: string, playerId: number | string) => socket?.emit("KICK_PLAYER_FROM_ROOM", { roomId, playerId });
   const admitPlayer = (roomId: string, playerId: number | string) => socket?.emit("ADMIT_PLAYER", { roomId, playerId });
   const admitAllPlayers = (roomId: string) => socket?.emit("ADMIT_ALL_PLAYERS", roomId);
@@ -151,7 +151,7 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
       value={{
         connected,
         players, addPlayer, kickPlayer,
-        rooms, createRoom, joinRoom, deleteRoom, kickPlayerFromRoom, admitPlayer, admitAllPlayers,
+        rooms, createRoom, joinRoom, finalizeRoom, kickPlayerFromRoom, admitPlayer, admitAllPlayers,
         addRoomPoints, removeRoomPoints, resetRoomLeaderboard,
         createChallenge, startChallengeLobby, launchChallenge, endChallenge, clearActiveChallenge,
         setPlayerReady, submitChallengeGeoguess
