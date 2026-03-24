@@ -12,7 +12,6 @@ export interface Player {
 
 export interface RoomPlayer extends Player {
   roomScore: number;
-  hasLoadedAssets: boolean;
   isReady: boolean;
 }
 
@@ -40,6 +39,7 @@ export interface Room {
   createdAt: number;
   creator: string;
   players: RoomPlayer[];
+  pendingPlayers: Player[];
   challenges: Challenge[];
   activeChallengeId: string | null;
 }
@@ -54,6 +54,9 @@ interface TournamentContextValue {
   createRoom: (name: string, creator: string) => void;
   joinRoom: (roomCode: string, player: Player) => void;
   deleteRoom: (roomId: string) => void;
+  kickPlayerFromRoom: (roomId: string, playerId: number | string) => void;
+  admitPlayer: (roomId: string, playerId: number | string) => void;
+  admitAllPlayers: (roomId: string) => void;
 
   addRoomPoints: (roomId: string, playerId: number, points: number) => void;
   removeRoomPoints: (roomId: string, playerId: number, points: number) => void;
@@ -65,7 +68,6 @@ interface TournamentContextValue {
   endChallenge: (roomId: string, challengeId: string) => void;
   clearActiveChallenge: (roomId: string) => void;
 
-  setPlayerLoadedAssets: (roomId: string, playerId: number, loaded: boolean) => void;
   setPlayerReady: (roomId: string, playerId: number, ready: boolean) => void;
   submitChallengeGeoguess: (roomId: string, challengeId: string, playerId: number | string, guessedCoords: [number, number], timeTaken: number) => void;
 }
@@ -125,6 +127,9 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
   const createRoom = (name: string, creator: string) => socket?.emit("CREATE_ROOM", { name, creator });
   const joinRoom = (roomCode: string, player: Player) => socket?.emit("JOIN_ROOM", { roomCode, player });
   const deleteRoom = (roomId: string) => socket?.emit("DELETE_ROOM", roomId);
+  const kickPlayerFromRoom = (roomId: string, playerId: number | string) => socket?.emit("KICK_PLAYER_FROM_ROOM", { roomId, playerId });
+  const admitPlayer = (roomId: string, playerId: number | string) => socket?.emit("ADMIT_PLAYER", { roomId, playerId });
+  const admitAllPlayers = (roomId: string) => socket?.emit("ADMIT_ALL_PLAYERS", roomId);
   const addRoomPoints = (roomId: string, playerId: number, points: number) => socket?.emit("ADD_ROOM_POINTS", { roomId, playerId, points });
   const removeRoomPoints = (roomId: string, playerId: number, points: number) => socket?.emit("REMOVE_ROOM_POINTS", { roomId, playerId, points });
   const resetRoomLeaderboard = (roomId: string) => socket?.emit("RESET_LEADERBOARD", roomId);
@@ -133,7 +138,7 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
   const launchChallenge = (roomId: string, challengeId: string) => socket?.emit("LAUNCH_CHALLENGE", { roomId, challengeId });
   const endChallenge = (roomId: string, challengeId: string) => socket?.emit("END_CHALLENGE", { roomId, challengeId });
   const clearActiveChallenge = (roomId: string) => socket?.emit("CLEAR_ACTIVE_CHALLENGE", roomId);
-  const setPlayerLoadedAssets = (roomId: string, playerId: number, loaded: boolean) => socket?.emit("SET_ASSETS_LOADED", { roomId, playerId, loaded });
+
   const setPlayerReady = (roomId: string, playerId: number, ready: boolean) => socket?.emit("SET_READY", { roomId, playerId, ready });
   const submitChallengeGeoguess = (roomId: string, challengeId: string, playerId: number | string, guessedCoords: [number, number], timeTaken: number) => socket?.emit("SUBMIT_GEOGUESS", { roomId, challengeId, playerId, guessedCoords, timeTaken });
 
@@ -142,10 +147,10 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
       value={{
         connected,
         players, addPlayer, kickPlayer,
-        rooms, createRoom, joinRoom, deleteRoom,
+        rooms, createRoom, joinRoom, deleteRoom, kickPlayerFromRoom, admitPlayer, admitAllPlayers,
         addRoomPoints, removeRoomPoints, resetRoomLeaderboard,
         createChallenge, startChallengeLobby, launchChallenge, endChallenge, clearActiveChallenge,
-        setPlayerLoadedAssets, setPlayerReady, submitChallengeGeoguess
+        setPlayerReady, submitChallengeGeoguess
       }}
     >
       {children}

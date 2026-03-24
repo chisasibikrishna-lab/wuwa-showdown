@@ -10,7 +10,6 @@ export interface Player {
 
 export interface RoomPlayer extends Player {
   roomScore: number;
-  hasLoadedAssets: boolean;
   isReady: boolean;
 }
 
@@ -38,6 +37,7 @@ export interface Room {
   createdAt: number;
   creator: string;
   players: RoomPlayer[];
+  pendingPlayers: Player[];
   challenges: Challenge[];
   activeChallengeId: string | null;
 }
@@ -87,6 +87,7 @@ class GameManager {
       createdAt: Date.now(),
       creator,
       players: [],
+      pendingPlayers: [],
       challenges: [],
       activeChallengeId: null,
     };
@@ -97,14 +98,41 @@ class GameManager {
   public joinRoom(roomCode: string, player: Player) {
     const room = this.rooms.find(r => r.code === roomCode);
     if (!room) return false;
-    if (!room.players.find(p => String(p.id) === String(player.id))) {
-      room.players.push({ ...player, roomScore: 0, hasLoadedAssets: false, isReady: false });
-    }
+    // Already admitted
+    if (room.players.find(p => String(p.id) === String(player.id))) return true;
+    // Already pending
+    if (room.pendingPlayers.find(p => String(p.id) === String(player.id))) return true;
+    room.pendingPlayers.push(player);
     return true;
+  }
+
+  public admitPlayer(roomId: string, playerId: number | string) {
+    const room = this.rooms.find(r => r.id === roomId);
+    if (!room) return;
+    const idx = room.pendingPlayers.findIndex(p => String(p.id) === String(playerId));
+    if (idx === -1) return;
+    const [player] = room.pendingPlayers.splice(idx, 1);
+    room.players.push({ ...player, roomScore: 0, isReady: false });
+  }
+
+  public admitAllPlayers(roomId: string) {
+    const room = this.rooms.find(r => r.id === roomId);
+    if (!room) return;
+    for (const player of room.pendingPlayers) {
+      room.players.push({ ...player, roomScore: 0, isReady: false });
+    }
+    room.pendingPlayers = [];
   }
 
   public deleteRoom(roomId: string) {
     this.rooms = this.rooms.filter(r => r.id !== roomId);
+  }
+
+  public kickPlayerFromRoom(roomId: string, playerId: number | string) {
+    const room = this.rooms.find(r => r.id === roomId);
+    if (!room) return;
+    room.players = room.players.filter(p => String(p.id) !== String(playerId));
+    room.pendingPlayers = room.pendingPlayers.filter(p => String(p.id) !== String(playerId));
   }
 
   public addRoomPoints(roomId: string, playerId: number, points: number) {
@@ -145,7 +173,6 @@ class GameManager {
     const room = this.rooms.find(r => r.id === roomId);
     if (!room) return;
     room.players.forEach(p => {
-      p.hasLoadedAssets = false;
       p.isReady = false;
     });
     room.activeChallengeId = challengeId;
@@ -178,12 +205,6 @@ class GameManager {
   }
 
   // PLAYER ACTIONS IN ROOM
-  public setPlayerLoadedAssets(roomId: string, playerId: number, loaded: boolean) {
-    const room = this.rooms.find(r => r.id === roomId);
-    if (!room) return;
-    const p = room.players.find(x => String(x.id) === String(playerId));
-    if (p) p.hasLoadedAssets = loaded;
-  }
 
   public setPlayerReady(roomId: string, playerId: number, ready: boolean) {
     const room = this.rooms.find(r => r.id === roomId);

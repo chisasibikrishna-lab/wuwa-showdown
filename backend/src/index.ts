@@ -67,6 +67,21 @@ io.on("connection", async (socket: Socket) => {
     broadcastState();
   });
 
+  socket.on("KICK_PLAYER_FROM_ROOM", ({ roomId, playerId }) => {
+    gameManager.kickPlayerFromRoom(roomId, playerId);
+    broadcastState();
+  });
+
+  socket.on("ADMIT_PLAYER", ({ roomId, playerId }) => {
+    gameManager.admitPlayer(roomId, playerId);
+    broadcastState();
+  });
+
+  socket.on("ADMIT_ALL_PLAYERS", (roomId: string) => {
+    gameManager.admitAllPlayers(roomId);
+    broadcastState();
+  });
+
   socket.on("ADD_ROOM_POINTS", ({ roomId, playerId, points }) => {
     gameManager.addRoomPoints(roomId, playerId, points);
     broadcastState();
@@ -115,10 +130,7 @@ io.on("connection", async (socket: Socket) => {
     broadcastState();
   });
 
-  socket.on("SET_ASSETS_LOADED", ({ roomId, playerId, loaded }) => {
-    gameManager.setPlayerLoadedAssets(roomId, playerId, loaded);
-    broadcastState();
-  });
+
 
   socket.on("SET_READY", ({ roomId, playerId, ready }) => {
     gameManager.setPlayerReady(roomId, playerId, ready);
