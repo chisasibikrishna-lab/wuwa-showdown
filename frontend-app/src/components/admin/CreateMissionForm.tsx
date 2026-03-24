@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { MapPin, Upload, X, Timer } from "lucide-react";
+import { MapPin, Upload, X, Timer, ChevronUp, ChevronDown } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useTournament } from "@/context/TournamentContext";
 
@@ -75,11 +75,18 @@ export default function CreateMissionForm({ roomId }: Props) {
             <label className="text-white/40 font-medium text-xs tracking-wide uppercase mb-2 flex items-center gap-2">
               <Timer size={14} /> Operation Time Limit (Seconds)
             </label>
-            <input
-              type="number" min="10" step="5" value={timeLimit} onChange={(e) => setTimeLimit(Number(e.target.value))}
-              className="w-full h-14 bg-[#111318] border border-white/[0.08] rounded-xl pl-4 pr-14 text-white font-mono text-lg outline-none focus:border-[#ffcc00]/30 transition-all duration-200"
-            />
-            <div className="absolute right-4 bottom-[17px] text-white/20 font-medium text-sm leading-none flex items-center">SEC</div>
+            <div className="relative w-full flex items-center">
+              <input
+                type="number" min="10" step="5" value={timeLimit} onChange={(e) => setTimeLimit(Number(e.target.value) || 0)}
+                className="w-full h-14 bg-[#111318] border border-white/[0.08] rounded-xl pl-4 pr-24 text-white font-mono text-lg outline-none focus:border-[#ffcc00]/30 transition-all duration-200 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"
+              />
+              <div className="absolute right-[56px] flex flex-col items-center justify-center border-l border-white/[0.08] h-[54px] w-10">
+                <button type="button" onClick={() => setTimeLimit(t => t + 5)} className="flex-1 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/[0.05] w-full rounded-tr-xl transition-colors"><ChevronUp size={16} /></button>
+                <div className="w-full h-[1px] bg-white/[0.08]"></div>
+                <button type="button" onClick={() => setTimeLimit(t => Math.max(10, t - 5))} className="flex-1 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/[0.05] w-full rounded-br-xl transition-colors"><ChevronDown size={16} /></button>
+              </div>
+              <div className="absolute right-4 text-white/20 font-medium text-sm leading-none flex items-center pointer-events-none">SEC</div>
+            </div>
           </div>
           <button
             onClick={handleCreateChallenge}

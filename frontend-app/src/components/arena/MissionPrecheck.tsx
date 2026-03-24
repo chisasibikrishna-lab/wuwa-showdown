@@ -11,7 +11,7 @@ interface Props {
 
 export default function MissionPrecheck({ myPlayer, onReady }: Props) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 border border-[#ffcc00]/15 bg-[#ffcc00]/[0.02] rounded-2xl w-full max-w-3xl shadow-xl backdrop-blur-sm relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center py-16 border border-[#ffcc00]/20 bg-black/40 rounded-2xl w-full max-w-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] backdrop-blur-2xl relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffcc00] to-transparent opacity-60" />
       <Lock size={52} className="text-[#ffcc00]/70 mb-6" />
       <h2 className="text-3xl text-white font-semibold tracking-tight mb-3">Mission Pre-check</h2>

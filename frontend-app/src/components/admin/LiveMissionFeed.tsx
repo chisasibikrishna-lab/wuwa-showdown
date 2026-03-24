@@ -38,7 +38,7 @@ export default function LiveMissionFeed({
   const pendingPlayers = room.pendingPlayers || [];
 
   return (
-    <div className={`border rounded-2xl p-8 md:p-10 shadow-xl relative overflow-hidden transition-all duration-500 ${activeChallenge.status === 'waiting' ? 'bg-[#ffcc00]/[0.02] border-[#ffcc00]/15' : 'bg-red-500/[0.03] border-red-500/20'}`}>
+    <div className={`border rounded-2xl p-8 md:p-10 shadow-[0_0_40px_rgba(0,0,0,0.6)] backdrop-blur-2xl relative overflow-hidden transition-all duration-500 ${activeChallenge.status === 'waiting' ? 'bg-black/40 border-[#ffcc00]/20' : 'bg-black/40 border-red-500/20'}`}>
       <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-current to-transparent opacity-40 ${activeChallenge.status === 'waiting' ? 'text-[#ffcc00]' : 'text-red-500'}`} />
 
       <div className="flex flex-col items-center text-center w-full">
@@ -97,7 +97,7 @@ export default function LiveMissionFeed({
 
             {/* Admitted Players - Ready Roster */}
             <div className="w-full max-w-2xl bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5 mb-10 max-h-[300px] overflow-y-auto text-left">
-              <div className="flex justify-between items-center border-b border-white/[0.06] pb-4 mb-4 sticky top-0 bg-[#0a0a0c]/90 backdrop-blur-md z-10 pt-1 -mt-1">
+              <div className="flex justify-between items-center border-b border-white/[0.06] pb-4 mb-4 sticky top-0 backdrop-blur-md z-10 pt-1 -mt-1">
                 <span className="text-white/40 font-medium text-xs tracking-wide uppercase flex items-center gap-2"><Users size={14} /> Roster Readiness</span>
                 <span className={`font-semibold font-mono px-3 py-1 rounded-lg text-xs ${allReady ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/15' : 'bg-[#ffcc00]/10 text-[#ffcc00] border border-[#ffcc00]/15'}`}>
                   {room.players.filter(p => p.isReady).length} / {room.players.length} READY

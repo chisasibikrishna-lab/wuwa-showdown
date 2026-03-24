@@ -164,7 +164,7 @@ export default function ArenaPage() {
 
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 flex flex-col items-center">
         {/* Header HUD */}
-        <div className="w-full mt-[10vh] flex justify-between items-center bg-[#111318] border border-white/[0.06] px-6 py-5 rounded-2xl shadow-xl shadow-black/30 mb-8">
+        <div className="w-full max-w-5xl mt-[6vh] lg:mt-[10vh] flex flex-col sm:flex-row justify-between items-center bg-black/40 border border-[#ffcc00]/20 px-6 sm:px-8 py-5 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl mb-5 gap-4 sm:gap-0 transition-all z-20">
           <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={myPlayer.avatar} alt="Profile" className="w-11 h-11 rounded-full border border-[#ffcc00]/30 shadow-[0_0_12px_rgba(255,204,0,0.15)]" />
@@ -173,18 +173,17 @@ export default function ArenaPage() {
               <div className="text-[#ffcc00] font-mono text-xs tracking-wide mt-0.5">TOTAL PTS: <span className="font-bold">{myPlayer.roomScore}</span></div>
             </div>
           </div>
-          <div className="flex items-end gap-4 h-full">
+          <div className="flex items-center gap-3">
             {summaryChallengeId && (
               <button 
                 onClick={() => setShowSummaryModal(true)}
-                className="bg-white/[0.05] hover:bg-white/10 text-white/80 border border-white/10 px-4 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all h-[34px]"
+                className="bg-white/[0.05] hover:bg-white/10 text-white/80 border border-white/10 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all"
               >
                 View Last Results
               </button>
             )}
-            <div className="text-right hidden sm:block">
-              <div className="text-white/30 font-medium tracking-wide text-xs uppercase mb-1">{room.name}</div>
-              <div className="bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-lg font-mono text-[#ffcc00] font-semibold tracking-[0.15em] text-sm h-[34px] flex items-center">{room.code}</div>
+            <div className="hidden sm:flex flex-col items-end justify-center">
+              <div className="bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-lg font-mono text-[#ffcc00] font-semibold tracking-[0.15em] text-sm">{room.code}</div>
             </div>
           </div>
         </div>

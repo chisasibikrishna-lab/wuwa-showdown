@@ -78,11 +78,21 @@ export default function OperationActivePanel({
 
       <div className="bg-black/20 border border-white/[0.04] rounded-xl p-4 mt-2">
         <p className="text-white/60 text-sm leading-relaxed mb-3">
-          Analyze the intelligence and mark the exact location on the Tac-Map. Max <span className="text-[#ffcc00] font-semibold">20 points</span> possible:
+          Study the information and mark the correct spot on the map. You can earn up to <span className="text-[#ffcc00] font-semibold">20 points</span>.
         </p>
+
         <ul className="text-white/40 text-xs flex flex-col gap-2 list-disc pl-4 marker:text-white/20">
-          <li><span className="text-white/50 font-medium">Drift Accuracy (Max 15 pts):</span> &le; 50u = 15 pts | &le; 150u = 10 pts | &le; 300u = 5 pts</li>
-          <li><span className="text-white/50 font-medium">Speed Bonus (Max +5 pts):</span> Faster lock-in yields higher multipliers</li>
+          <li>
+            <span className="text-white/50 font-medium">Accuracy (up to 15 points):</span><br />
+            • Within 50 units → 15 points<br />
+            • Within 150 units → 10 points<br />
+            • Within 300 units → 5 points
+          </li>
+
+          <li>
+            <span className="text-white/50 font-medium">Speed Bonus (up to 5 points):</span><br />
+            • Faster answers give you more bonus points
+          </li>
         </ul>
       </div>
 
