@@ -49,6 +49,10 @@ export interface Room {
 class GameManager {
   private rooms: Room[] = [];
 
+  public getRoomById(roomId: string): Room | undefined {
+    return this.rooms.find(r => r.id === roomId);
+  }
+
   public async getFullState() {
     try {
       const topUsers = await UserModel.find({}).sort({ totalScore: -1 }).limit(50);

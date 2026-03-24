@@ -3,7 +3,8 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { LogOut, User as UserIcon } from "lucide-react";
+import ProfileDropdown from "@/components/ProfileDropdown";
+import { User as UserIcon } from "lucide-react";
 import { Rajdhani } from "next/font/google";
 
 const rajdhani = Rajdhani({
@@ -105,15 +106,7 @@ export default function TopNavbar() {
 
             <div className="flex items-center pl-4 border-l border-white/10 h-8 ml-auto pointer-events-auto">
                {user ? (
-                 <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2">
-                       <img src={user.avatar} className="w-6 h-6 rounded-full border border-white/20 shadow-inner" />
-                       <span className="text-white font-semibold tracking-wide text-[13px] uppercase">{user.name}</span>
-                    </div>
-                    <button onClick={logout} className="text-white/40 hover:text-red-400 transition-colors flex items-center gap-1 text-[11px] uppercase font-bold tracking-widest" title="Logout">
-                       <LogOut size={14} />
-                    </button>
-                 </div>
+                 <ProfileDropdown />
                ) : (
                  <Link href="/login" className="text-[#ffcc00] border border-[#ffcc00]/50 hover:bg-[#ffcc00]/10 px-3 py-1 rounded transition-all flex items-center gap-2 text-[12px] uppercase font-semibold tracking-wide">
                     <UserIcon size={14} /> Login

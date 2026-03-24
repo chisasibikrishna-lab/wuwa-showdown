@@ -6,11 +6,15 @@ import { config } from "./config/env";
 import { gameManager } from "./store/GameStore";
 import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes";
+import historyRoutes from "./routes/historyRoutes";
+import { RoomRecord } from "./models/RoomRecord";
+import { ChallengeRecord } from "./models/ChallengeRecord";
 
 const app = express();
-app.use(cors({ origin: config.FRONTEND_URL, methods: ["GET", "POST"] }));
+app.use(cors({ origin: config.FRONTEND_URL, methods: ["GET", "POST", "DELETE"] }));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use("/api/history", historyRoutes);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -35,6 +39,51 @@ io.use((socket, next) => {
 const broadcastState = async () => {
   io.emit("STATE_UPDATE", await gameManager.getFullState());
 };
+
+// Shared helper: persist a completed challenge and upsert its RoomRecord
+async function persistChallengeRecord(roomId: string, challengeId: string) {
+  const room = gameManager.getRoomById(roomId);
+  if (!room) return;
+  const challenge = room.challenges.find(c => c.id === challengeId);
+  if (!challenge || challenge.status !== "completed") return;
+
+  // Check if we already recorded this challenge to avoid duplicates
+  const already = await ChallengeRecord.findOne({ liveId: challengeId } as any);
+  if (already) return;
+
+  try {
+    let roomRecord = await RoomRecord.findOne({ code: room.code });
+    if (!roomRecord) {
+      roomRecord = await RoomRecord.create({
+        name: room.name, code: room.code, creator: room.creator,
+        players: room.players.map(p => ({ id: String(p.id), name: p.name, avatar: p.avatar, roomScore: p.roomScore })),
+        challengeCount: 1,
+      });
+    } else {
+      roomRecord.players = room.players.map(p => ({ id: String(p.id), name: p.name, avatar: p.avatar, roomScore: p.roomScore })) as any;
+      roomRecord.challengeCount = (roomRecord.challengeCount || 0) + 1;
+      await roomRecord.save();
+    }
+
+    const enrichedResults = challenge.results.map(r => {
+      const player = room.players.find(p => String(p.id) === String(r.playerId));
+      return { ...r, playerName: player?.name ?? "Unknown", playerAvatar: player?.avatar ?? "" };
+    });
+
+    await ChallengeRecord.create({
+      liveId: challengeId,
+      roomRecordId: roomRecord._id,
+      roomCode: room.code,
+      timeLimitSeconds: challenge.timeLimitSeconds,
+      completedAt: new Date(),
+      results: enrichedResults,
+      historicalRankings: challenge.historicalRankings || { before: [], after: [] },
+    });
+    console.log(`[History] Saved challenge ${challengeId} for room ${room.code}`);
+  } catch (e) {
+    console.error("[History] Failed to save challenge record", e);
+  }
+}
 
 io.on("connection", async (socket: Socket) => {
   console.log(`[Socket] Operator connected: ${socket.id}`);
@@ -64,8 +113,27 @@ io.on("connection", async (socket: Socket) => {
     broadcastState();
   });
 
-  socket.on("DELETE_ROOM", (roomId: string) => {
+  socket.on("DELETE_ROOM", async (roomId: string) => {
     if (socket.data.user?.role !== "admin") return;
+    // Persist the room before deleting from memory
+    const room = await gameManager.getRoomById(roomId);
+    if (room) {
+      try {
+        const existing = await RoomRecord.findOne({ code: room.code });
+        if (!existing) {
+          await RoomRecord.create({
+            name: room.name,
+            code: room.code,
+            creator: room.creator,
+            players: room.players.map(p => ({ id: String(p.id), name: p.name, avatar: p.avatar, roomScore: p.roomScore })),
+            challengeCount: room.challenges.filter(c => c.status === "completed").length,
+            closedAt: new Date(),
+          });
+        }
+      } catch (e) {
+        console.error("[History] Failed to save room record", e);
+      }
+    }
     gameManager.deleteRoom(roomId);
     broadcastState();
   });
@@ -125,17 +193,19 @@ io.on("connection", async (socket: Socket) => {
     
     // Server Authority: Auto close the mission precisely when the duration terminates
     if (timeLimit) {
-      setTimeout(() => {
+      setTimeout(async () => {
         gameManager.endChallenge(roomId, challengeId);
         broadcastState();
+        await persistChallengeRecord(roomId, challengeId);
       }, timeLimit * 1000);
     }
   });
 
-  socket.on("END_CHALLENGE", ({ roomId, challengeId }) => {
+  socket.on("END_CHALLENGE", async ({ roomId, challengeId }) => {
     if (socket.data.user?.role !== "admin") return;
     gameManager.endChallenge(roomId, challengeId);
     broadcastState();
+    await persistChallengeRecord(roomId, challengeId);
   });
 
   socket.on("CLEAR_ACTIVE_CHALLENGE", (roomId: string) => {
@@ -154,6 +224,14 @@ io.on("connection", async (socket: Socket) => {
   socket.on("SUBMIT_GEOGUESS", async ({ roomId, challengeId, playerId, guessedCoords, timeTaken }) => {
     await gameManager.submitChallengeGeoguess(roomId, challengeId, playerId, guessedCoords, timeTaken);
     broadcastState();
+    // Auto-complete: if all players submitted, GameStore marks challenge as completed internally — persist it here
+    const room = gameManager.getRoomById(roomId);
+    if (room) {
+      const challenge = room.challenges.find(c => c.id === challengeId);
+      if (challenge?.status === "completed") {
+        await persistChallengeRecord(roomId, challengeId);
+      }
+    }
   });
 
   socket.on("disconnect", () => {

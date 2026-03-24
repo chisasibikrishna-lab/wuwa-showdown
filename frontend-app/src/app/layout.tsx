@@ -2,6 +2,7 @@ import "./globals.css";
 import BaseLayout from "@/components/BaseLayout";
 import { TournamentProvider } from "@/context/TournamentContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { HistoryProvider } from "@/context/HistoryContext";
 import RouteGuard from "@/components/RouteGuard";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -27,9 +28,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full">
         <AuthProvider>
           <TournamentProvider>
-            <RouteGuard>
-              <BaseLayout>{children}</BaseLayout>
-            </RouteGuard>
+            <HistoryProvider>
+              <RouteGuard>
+                <BaseLayout>{children}</BaseLayout>
+              </RouteGuard>
+            </HistoryProvider>
           </TournamentProvider>
         </AuthProvider>
       </body>
