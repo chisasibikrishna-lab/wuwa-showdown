@@ -30,6 +30,10 @@ export interface Challenge {
   status: "pending" | "waiting" | "active" | "completed";
   results: ChallengeResult[];
   startedAt?: number;
+  historicalRankings?: {
+    before: RoomPlayer[];
+    after: RoomPlayer[];
+  };
 }
 
 export interface Room {

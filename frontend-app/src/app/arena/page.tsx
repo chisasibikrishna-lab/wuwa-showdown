@@ -212,7 +212,7 @@ export default function ArenaPage() {
             </div>
 
             {/* Right Panel: Tac-Map */}
-            <div className="lg:col-span-8 flex flex-col h-[60vh] lg:h-auto lg:min-h-[700px] bg-[#111318] border border-white/[0.06] rounded-2xl p-3 shadow-2xl shadow-black/30 relative order-1 lg:order-2">
+            <div className="lg:col-span-8 flex flex-col h-[60vh] lg:h-auto lg:min-h-[700px] bg-black/40 border border-[#ffcc00]/20 rounded-3xl p-3 shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl relative order-1 lg:order-2">
               <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none bg-black/80 backdrop-blur-xl border border-[#ffcc00]/20 px-5 py-2 rounded-full shadow-xl">
                 <span className="text-white font-medium tracking-wide text-sm flex items-center gap-2 whitespace-nowrap">
                   <MapPin size={16} className="text-[#ffcc00]" />
@@ -232,14 +232,21 @@ export default function ArenaPage() {
         ) : null}
       </div>
 
-      {showSummaryModal && room && (
-        <ChallengeSummaryModal
-          players={room.players}
-          challengeResults={summaryChallengeResults}
-          previousRanking={previousRanking}
-          onClose={() => setShowSummaryModal(false)}
-        />
-      )}
+      {showSummaryModal && room && (() => {
+        const summaryChallenge = summaryChallengeId ? room.challenges.find(c => c.id === summaryChallengeId) : null;
+        const histAfter = summaryChallenge?.historicalRankings?.after;
+        const histBefore = summaryChallenge?.historicalRankings?.before;
+        const playersForSummary = histAfter && histAfter.length > 0 ? histAfter : room.players;
+        const previousRankingForSummary = histBefore && histBefore.length > 0 ? histBefore : previousRanking;
+        return (
+          <ChallengeSummaryModal
+            players={playersForSummary}
+            challengeResults={summaryChallengeResults}
+            previousRanking={previousRankingForSummary}
+            onClose={() => setShowSummaryModal(false)}
+          />
+        );
+      })()}
     </div>
   );
 }

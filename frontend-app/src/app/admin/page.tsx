@@ -219,14 +219,21 @@ function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }
         </div>
       )}
 
-      {showSummaryModal && room && (
-        <ChallengeSummaryModal
-          players={room.players}
-          challengeResults={summaryChallengeResults}
-          previousRanking={previousRanking}
-          onClose={() => setShowSummaryModal(false)}
-        />
-      )}
+      {showSummaryModal && room && (() => {
+        const summaryChallenge = summaryChallengeId ? room.challenges.find(c => c.id === summaryChallengeId) : null;
+        const histAfter = summaryChallenge?.historicalRankings?.after;
+        const histBefore = summaryChallenge?.historicalRankings?.before;
+        const playersForSummary = histAfter && histAfter.length > 0 ? histAfter : room.players;
+        const previousRankingForSummary = histBefore && histBefore.length > 0 ? histBefore : previousRanking;
+        return (
+          <ChallengeSummaryModal
+            players={playersForSummary}
+            challengeResults={summaryChallengeResults}
+            previousRanking={previousRankingForSummary}
+            onClose={() => setShowSummaryModal(false)}
+          />
+        );
+      })()}
     </div>
   );
 }

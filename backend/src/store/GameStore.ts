@@ -28,6 +28,10 @@ export interface Challenge {
   status: "pending" | "waiting" | "active" | "completed";
   results: ChallengeResult[];
   startedAt?: number;
+  historicalRankings?: {
+    before: RoomPlayer[];
+    after: RoomPlayer[];
+  };
 }
 
 export interface Room {
@@ -197,6 +201,10 @@ class GameManager {
     if (c) {
       c.status = "active";
       c.startedAt = Date.now();
+      c.historicalRankings = {
+        before: JSON.parse(JSON.stringify(room.players)),
+        after: []
+      };
       return c.timeLimitSeconds;
     }
   }
@@ -205,7 +213,11 @@ class GameManager {
     const room = this.rooms.find(r => r.id === roomId);
     if (!room) return;
     const c = room.challenges.find(x => x.id === challengeId);
-    if (c) c.status = "completed";
+    if (c) {
+      c.status = "completed";
+      if (!c.historicalRankings) c.historicalRankings = { before: [], after: [] };
+      c.historicalRankings.after = JSON.parse(JSON.stringify(room.players));
+    }
   }
 
   public clearActiveChallenge(roomId: string) {

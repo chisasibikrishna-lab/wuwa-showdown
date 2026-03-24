@@ -22,7 +22,7 @@ export default function OperationActivePanel({
 }: Props) {
   if (myResult || activeChallenge.status === "completed") {
     return (
-      <div className="bg-[#111318] border border-[#ffcc00]/15 rounded-2xl p-8 shadow-xl flex flex-col items-center justify-center text-center h-full overflow-hidden min-h-[500px]">
+      <div className="bg-black/40 border border-[#ffcc00]/20 rounded-3xl p-8 shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl flex flex-col items-center justify-center text-center h-full overflow-hidden min-h-[500px] relative">
         <CheckCircle2 size={52} className="text-[#ffcc00]/80 mb-5" />
         <h2 className="text-2xl lg:text-3xl text-white font-semibold tracking-tight mb-4">Submission Locked</h2>
 
@@ -55,7 +55,7 @@ export default function OperationActivePanel({
   }
 
   return (
-    <div className="bg-[#111318] border border-red-500/15 rounded-2xl p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden h-fit">
+    <div className="bg-black/40 border border-red-500/20 rounded-3xl p-6 shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl flex flex-col gap-4 relative overflow-hidden h-fit">
       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-50" />
 
       <div className="flex justify-between items-center mb-1">

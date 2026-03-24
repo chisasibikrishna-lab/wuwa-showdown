@@ -4,7 +4,7 @@ import { Radio } from "lucide-react";
 
 export default function StandbyMode() {
   return (
-    <div className="flex flex-col items-center justify-center p-16 md:p-24 border border-[#ffcc00]/20 bg-black/40 rounded-3xl w-full max-w-4xl shadow-[0_0_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl relative overflow-hidden group">
+    <div className="flex flex-col items-center justify-center p-16 md:p-24 border border-[#ffcc00]/20 bg-black/40 rounded-3xl w-full max-w-5xl shadow-[0_0_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl relative overflow-hidden group">
       {/* Decorative background elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-30 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#ffcc00]/10 rounded-full blur-3xl"></div>
