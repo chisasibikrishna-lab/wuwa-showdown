@@ -92,7 +92,7 @@ export default function ArenaPage() {
     if (summaryChallengeId === latestCompleted.id) return;
     setSummaryChallengeId(latestCompleted.id);
     setSummaryChallengeResults(latestCompleted.results);
-    setShowSummaryModal(true);
+    // setShowSummaryModal(true); // Removed automatic popup per user request
   }, [room, summaryChallengeId]);
 
   // Reset guess when challenge waiting
@@ -173,9 +173,19 @@ export default function ArenaPage() {
               <div className="text-[#ffcc00] font-mono text-xs tracking-wide mt-0.5">TOTAL PTS: <span className="font-bold">{myPlayer.roomScore}</span></div>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-white/30 font-medium tracking-wide text-xs uppercase mb-1.5">{room.name}</div>
-            <div className="bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-lg font-mono text-[#ffcc00] font-semibold tracking-[0.15em] text-sm">{room.code}</div>
+          <div className="flex items-end gap-4 h-full">
+            {summaryChallengeId && (
+              <button 
+                onClick={() => setShowSummaryModal(true)}
+                className="bg-white/[0.05] hover:bg-white/10 text-white/80 border border-white/10 px-4 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all h-[34px]"
+              >
+                View Last Results
+              </button>
+            )}
+            <div className="text-right hidden sm:block">
+              <div className="text-white/30 font-medium tracking-wide text-xs uppercase mb-1">{room.name}</div>
+              <div className="bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-lg font-mono text-[#ffcc00] font-semibold tracking-[0.15em] text-sm h-[34px] flex items-center">{room.code}</div>
+            </div>
           </div>
         </div>
 

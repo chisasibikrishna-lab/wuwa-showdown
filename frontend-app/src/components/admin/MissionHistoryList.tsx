@@ -6,9 +6,10 @@ import { useTournament } from "@/context/TournamentContext";
 interface Props {
   roomId: string;
   challenges: Challenge[];
+  onViewResults?: (challengeId: string) => void;
 }
 
-export default function MissionHistoryList({ roomId, challenges }: Props) {
+export default function MissionHistoryList({ roomId, challenges, onViewResults }: Props) {
   const { startChallengeLobby } = useTournament();
 
   return (
@@ -31,7 +32,7 @@ export default function MissionHistoryList({ roomId, challenges }: Props) {
               </div>
             </div>
             <div className="flex items-center w-full sm:w-auto justify-end gap-3 border-t sm:border-t-0 border-white/[0.04] pt-3 sm:pt-0">
-              <div className={`px-3.5 py-1.5 rounded-lg text-xs font-medium tracking-wide ${c.status === 'pending' ? 'bg-white/[0.03] text-white/40 border border-white/[0.06]' : c.status === 'completed' ? 'bg-emerald-500/8 text-emerald-400 border border-emerald-500/15' : 'bg-[#ffcc00]/8 text-[#ffcc00] border border-[#ffcc00]/15'}`}>
+              <div className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide flex items-center justify-center capitalize border ${c.status === 'pending' ? 'bg-white/[0.03] text-white/40 border-white/[0.06]' : c.status === 'completed' ? 'bg-emerald-500/8 text-emerald-400 border-emerald-500/15' : 'bg-[#ffcc00]/8 text-[#ffcc00] border-[#ffcc00]/15'}`}>
                 {c.status}
               </div>
               {c.status === 'pending' && (
@@ -40,6 +41,14 @@ export default function MissionHistoryList({ roomId, challenges }: Props) {
                   className="bg-white/[0.04] hover:bg-white hover:text-black text-white border border-white/[0.08] hover:border-white px-5 py-2 rounded-xl font-medium text-xs tracking-wide transition-all duration-200 min-w-[100px]"
                 >
                   Commence
+                </button>
+              )}
+              {c.status === 'completed' && onViewResults && (
+                <button
+                  onClick={() => onViewResults(c.id)}
+                  className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-4 py-2 rounded-xl font-medium text-xs tracking-wide transition-all duration-200 whitespace-nowrap flex items-center justify-center"
+                >
+                  View Results
                 </button>
               )}
             </div>

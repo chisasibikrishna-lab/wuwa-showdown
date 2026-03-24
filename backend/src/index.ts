@@ -48,11 +48,13 @@ io.on("connection", async (socket: Socket) => {
   });
 
   socket.on("KICK_PLAYER", (playerId: number) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.kickPlayerGlobal(playerId);
     broadcastState();
   });
 
   socket.on("CREATE_ROOM", ({ name, creator }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.createRoom(name, creator);
     broadcastState();
   });
@@ -63,51 +65,61 @@ io.on("connection", async (socket: Socket) => {
   });
 
   socket.on("DELETE_ROOM", (roomId: string) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.deleteRoom(roomId);
     broadcastState();
   });
 
   socket.on("KICK_PLAYER_FROM_ROOM", ({ roomId, playerId }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.kickPlayerFromRoom(roomId, playerId);
     broadcastState();
   });
 
   socket.on("ADMIT_PLAYER", ({ roomId, playerId }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.admitPlayer(roomId, playerId);
     broadcastState();
   });
 
   socket.on("ADMIT_ALL_PLAYERS", (roomId: string) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.admitAllPlayers(roomId);
     broadcastState();
   });
 
   socket.on("ADD_ROOM_POINTS", ({ roomId, playerId, points }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.addRoomPoints(roomId, playerId, points);
     broadcastState();
   });
 
   socket.on("REMOVE_ROOM_POINTS", ({ roomId, playerId, points }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.removeRoomPoints(roomId, playerId, points);
     broadcastState();
   });
 
   socket.on("RESET_LEADERBOARD", (roomId: string) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.resetRoomLeaderboard(roomId);
     broadcastState();
   });
 
   socket.on("CREATE_CHALLENGE", ({ roomId, image, targetCoords, timeLimitSeconds }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.createChallenge(roomId, image, targetCoords, timeLimitSeconds);
     broadcastState();
   });
 
   socket.on("START_CHALLENGE_LOBBY", ({ roomId, challengeId }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.startChallengeLobby(roomId, challengeId);
     broadcastState();
   });
 
   socket.on("LAUNCH_CHALLENGE", ({ roomId, challengeId }) => {
+    if (socket.data.user?.role !== "admin") return;
     const timeLimit = gameManager.launchChallenge(roomId, challengeId);
     broadcastState();
     
@@ -121,11 +133,13 @@ io.on("connection", async (socket: Socket) => {
   });
 
   socket.on("END_CHALLENGE", ({ roomId, challengeId }) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.endChallenge(roomId, challengeId);
     broadcastState();
   });
 
   socket.on("CLEAR_ACTIVE_CHALLENGE", (roomId: string) => {
+    if (socket.data.user?.role !== "admin") return;
     gameManager.clearActiveChallenge(roomId);
     broadcastState();
   });

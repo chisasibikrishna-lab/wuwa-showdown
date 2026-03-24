@@ -77,14 +77,14 @@ export default function CreateMissionForm({ roomId }: Props) {
             </label>
             <input
               type="number" min="10" step="5" value={timeLimit} onChange={(e) => setTimeLimit(Number(e.target.value))}
-              className="w-full bg-[#111318] border border-white/[0.08] rounded-xl pl-4 pr-14 py-3.5 text-white font-mono text-lg outline-none focus:border-[#ffcc00]/30 transition-all duration-200"
+              className="w-full h-14 bg-[#111318] border border-white/[0.08] rounded-xl pl-4 pr-14 text-white font-mono text-lg outline-none focus:border-[#ffcc00]/30 transition-all duration-200"
             />
-            <div className="absolute right-4 bottom-3.5 text-white/20 font-medium text-sm">SEC</div>
+            <div className="absolute right-4 bottom-[17px] text-white/20 font-medium text-sm leading-none flex items-center">SEC</div>
           </div>
           <button
             onClick={handleCreateChallenge}
             disabled={!geoImage || !geoCoords}
-            className="w-full md:w-auto bg-[#ffcc00] hover:bg-[#ffe066] text-black px-10 py-3.5 rounded-xl font-semibold tracking-wide text-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,204,0,0.1)] disabled:shadow-none min-w-[220px]"
+            className="w-full md:w-auto h-14 flex items-center justify-center bg-[#ffcc00] hover:bg-[#ffe066] text-black px-10 rounded-xl font-semibold tracking-wide text-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,204,0,0.1)] disabled:shadow-none min-w-[220px]"
           >
             Register Mission
           </button>

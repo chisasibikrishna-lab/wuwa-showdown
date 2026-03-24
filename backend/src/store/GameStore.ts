@@ -55,8 +55,18 @@ class GameManager {
         avatar: u.avatar
       })) as Player[];
 
+      const sanitizedRooms = JSON.parse(JSON.stringify(this.rooms));
+      for (const room of sanitizedRooms) {
+        if (!room.challenges) continue;
+        for (const challenge of room.challenges) {
+          if (challenge.status !== "completed") {
+            challenge.targetCoords = [0, 0];
+          }
+        }
+      }
+
       return {
-        rooms: this.rooms,
+        rooms: sanitizedRooms,
         players: globalPlayers,
       };
     } catch (e) {
@@ -229,10 +239,11 @@ class GameManager {
     else if (distance <= 150) points = 10;
     else if (distance <= 300) points = 5;
 
-    const timeRatio = Math.max(0, 1 - (timeTaken / c.timeLimitSeconds));
+    const actualTimeTaken = c.startedAt ? Math.max(0, Math.floor((Date.now() - c.startedAt) / 1000)) : Math.max(0, timeTaken);
+    const timeRatio = Math.max(0, 1 - (actualTimeTaken / c.timeLimitSeconds));
     points += Math.floor(timeRatio * 5);
 
-    c.results.push({ playerId, points, distance, timeTaken });
+    c.results.push({ playerId, points, distance, timeTaken: actualTimeTaken });
 
     const p = room.players.find(x => String(x.id) === String(playerId));
     if (p) p.roomScore += points;

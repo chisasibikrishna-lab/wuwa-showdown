@@ -133,7 +133,7 @@ function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }
     if (latestCompleted.id === summaryChallengeId) return;
     setSummaryChallengeId(latestCompleted.id);
     setSummaryChallengeResults(latestCompleted.results);
-    setShowSummaryModal(true);
+    // setShowSummaryModal(true); // Removed automatic popup per user request
   }, [room.challenges, summaryChallengeId]);
 
   useEffect(() => {
@@ -202,7 +202,18 @@ function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }
           ) : (
             <>
               <CreateMissionForm roomId={room.id} />
-              <MissionHistoryList roomId={room.id} challenges={room.challenges} />
+              <MissionHistoryList 
+                roomId={room.id} 
+                challenges={room.challenges} 
+                onViewResults={(id) => {
+                  const challenge = room.challenges.find(c => c.id === id);
+                  if (challenge) {
+                    setSummaryChallengeId(challenge.id);
+                    setSummaryChallengeResults(challenge.results);
+                    setShowSummaryModal(true);
+                  }
+                }}
+              />
             </>
           )}
         </div>
