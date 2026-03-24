@@ -4,6 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { LogOut, User as UserIcon } from "lucide-react";
+import { Rajdhani } from "next/font/google";
+
+const rajdhani = Rajdhani({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+});
 
 interface NavItemProps {
   label: string;
@@ -42,10 +48,9 @@ const NavItem: React.FC<NavItemProps> = ({ label, href, isActive }) => {
 
       {/* Nav Item Text */}
       <span
-        className={`relative z-10 text-[15px] uppercase transition-colors duration-300 ${
+        className={`relative z-10 text-[15px] uppercase font-bold tracking-[0.12em] transition-colors duration-300 ${
           isActive ? "text-[#ffcc00] drop-shadow-[0_0_8px_rgba(255,204,0,0.6)]" : "text-[#8b92a5] group-hover:text-white"
         }`}
-        style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, letterSpacing: "0.12em" }}
       >
         {label}
       </span>
@@ -53,21 +58,23 @@ const NavItem: React.FC<NavItemProps> = ({ label, href, isActive }) => {
   );
 };
 
-const navItems = [
+const baseNavItems = [
   { label: "HOME", href: "/" },
-  { label: "LEADERBOARD", href: "/leaderboard" },
+  // { label: "LEADERBOARD", href: "/leaderboard" },
   { label: "MAP", href: "/map" },
   { label: "ARENA", href: "/arena" },
-  { label: "ADMIN", href: "/admin" },
 ];
 
 export default function TopNavbar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const navItems = user?.role === "admin"
+    ? [...baseNavItems, { label: "ADMIN", href: "/admin" }]
+    : baseNavItems;
 
   return (
-    <div className="w-full flex justify-start z-50 fixed top-0 left-0 right-0 pointer-events-none">
-      <div className="relative h-14 w-full max-w-[1200px] pointer-events-auto">
+    <div className={`w-full flex justify-start z-50 fixed top-0 left-0 right-0 pointer-events-none ${rajdhani.className}`}>
+      <div className="relative h-14 w-full max-w-[1000px] pointer-events-auto">
         {/* Glassmorphism Background with Slanted Right Edge */}
         <div
           className="absolute inset-0 bg-[#161922]/90 backdrop-blur-md border-t border-b border-white/[0.04]"
@@ -79,10 +86,8 @@ export default function TopNavbar() {
           {/* Left Side: Title */}
           <div className="flex-shrink-0 mr-16 pt-1">
             <h1
-              className="text-white text-[32px] italic uppercase"
+              className="text-white text-[28px] italic uppercase font-bold tracking-[0.08em]"
               style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                letterSpacing: "0.08em",
                 textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
               }}
             >
@@ -103,14 +108,14 @@ export default function TopNavbar() {
                  <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                        <img src={user.avatar} className="w-6 h-6 rounded-full border border-white/20 shadow-inner" />
-                       <span className="text-white font-bold tracking-widest text-[13px] uppercase" style={{ fontFamily: "'Rajdhani', sans-serif" }}>{user.name}</span>
+                       <span className="text-white font-semibold tracking-wide text-[13px] uppercase">{user.name}</span>
                     </div>
                     <button onClick={logout} className="text-white/40 hover:text-red-400 transition-colors flex items-center gap-1 text-[11px] uppercase font-bold tracking-widest" title="Logout">
                        <LogOut size={14} />
                     </button>
                  </div>
                ) : (
-                 <Link href="/login" className="text-[#ffcc00] border border-[#ffcc00]/50 hover:bg-[#ffcc00]/10 px-3 py-1 rounded transition-all flex items-center gap-2 text-[12px] uppercase font-bold tracking-widest" style={{ fontFamily: "'Rajdhani', sans-serif" }}>
+                 <Link href="/login" className="text-[#ffcc00] border border-[#ffcc00]/50 hover:bg-[#ffcc00]/10 px-3 py-1 rounded transition-all flex items-center gap-2 text-[12px] uppercase font-semibold tracking-wide">
                     <UserIcon size={14} /> Login
                  </Link>
                )}

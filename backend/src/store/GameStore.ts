@@ -167,9 +167,14 @@ class GameManager {
   public endChallenge(roomId: string, challengeId: string) {
     const room = this.rooms.find(r => r.id === roomId);
     if (!room) return;
-    room.activeChallengeId = null;
     const c = room.challenges.find(x => x.id === challengeId);
     if (c) c.status = "completed";
+  }
+
+  public clearActiveChallenge(roomId: string) {
+    const room = this.rooms.find(r => r.id === roomId);
+    if (!room) return;
+    room.activeChallengeId = null;
   }
 
   // PLAYER ACTIONS IN ROOM

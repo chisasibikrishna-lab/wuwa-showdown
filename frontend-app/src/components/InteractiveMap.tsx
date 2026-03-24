@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { getTile, setTile } from "@/lib/tileCache";
 
 export interface InteractiveMapProps {
   onLocationSelect?: (coords: [number, number]) => void;
@@ -14,6 +15,14 @@ export interface InteractiveMapProps {
 export default function InteractiveMap({ onLocationSelect, selectedLocation, correctLocation, readOnly = false }: InteractiveMapProps = {}) {
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  const readOnlyRef = useRef(readOnly);
+  const onLocationSelectRef = useRef(onLocationSelect);
+
+  useEffect(() => {
+    readOnlyRef.current = readOnly;
+    onLocationSelectRef.current = onLocationSelect;
+  }, [readOnly, onLocationSelect]);
 
   useEffect(() => {
     if (typeof window === "undefined" || mapRef.current || !containerRef.current) return;
@@ -56,22 +65,60 @@ export default function InteractiveMap({ onLocationSelect, selectedLocation, cor
       [MAP_SIZE, MAP_SIZE],
     ];
 
-    const WutheringLayer = L.TileLayer.extend({
-      getTileUrl: function (coords: any) {
-        const x = coords.x;
-        const y = coords.y;
+    const getTileUrlForCoords = (coords: any): string | null => {
+      const x = coords.x;
+      const y = coords.y;
+      if (x < 0 || x > 3 || y < 0 || y > 3) return null;
+      const fileX = Math.floor(x / 2);
+      const fileY = Math.floor(y / 2);
+      const cropX = (x % 2) * 512;
+      const cropY = (y % 2) * 512;
+      return `https://static-web.ghzs.com/cspage_pro/mingchao-map/map/694b547e098e7f00018a63b8/${fileX}_${fileY}.webp?x-oss-process=image/resize,p_25/crop,x_${cropX},y_${cropY},w_512,h_512`;
+    };
 
-        if (x < 0 || x > 3 || y < 0 || y > 3) {
-          return "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    const BLANK_TILE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+    const WutheringLayer = L.TileLayer.extend({
+      createTile(coords: any, done: (err: Error | null, tile: HTMLElement) => void) {
+        const img = document.createElement("img");
+        img.setAttribute("role", "presentation");
+
+        const url = getTileUrlForCoords(coords);
+        if (!url) {
+          img.src = BLANK_TILE;
+          done(null, img);
+          return img;
         }
 
-        const fileX = Math.floor(x / 2);
-        const fileY = Math.floor(y / 2);
+        const cacheKey = `tile_${coords.x}_${coords.y}_${coords.z}`;
 
-        const cropX = (x % 2) * 512;
-        const cropY = (y % 2) * 512;
+        getTile(cacheKey).then((cached) => {
+          if (cached) {
+            // Serve from IndexedDB
+            img.src = URL.createObjectURL(cached);
+            done(null, img);
+          } else {
+            // Fetch from network, cache it, then display
+            fetch(url, { mode: "cors" })
+              .then((res) => {
+                if (!res.ok) throw new Error("network");
+                return res.blob();
+              })
+              .then((blob) => {
+                setTile(cacheKey, blob); // fire-and-forget
+                img.src = URL.createObjectURL(blob);
+                done(null, img);
+              })
+              .catch(() => {
+                // CORS or network failed — fall back to direct URL
+                img.src = url;
+                img.onload = () => done(null, img);
+                img.onerror = () => done(new Error("tile load failed"), img);
+              });
+          }
+        });
 
-        return `https://static-web.ghzs.com/cspage_pro/mingchao-map/map/694b547e098e7f00018a63b8/${fileX}_${fileY}.webp?x-oss-process=image/resize,p_25/crop,x_${cropX},y_${cropY},w_512,h_512`;
+        return img;
       },
     });
 
@@ -91,9 +138,9 @@ export default function InteractiveMap({ onLocationSelect, selectedLocation, cor
 
     // Pin Dropping Logic
     map.on("click", (e: L.LeafletMouseEvent) => {
-      if (readOnly) return;
-      if (onLocationSelect) {
-        onLocationSelect([e.latlng.lat, e.latlng.lng]);
+      if (readOnlyRef.current) return;
+      if (onLocationSelectRef.current) {
+        onLocationSelectRef.current([e.latlng.lat, e.latlng.lng]);
       }
     });
 
@@ -169,7 +216,7 @@ export default function InteractiveMap({ onLocationSelect, selectedLocation, cor
       map.remove();
       mapRef.current = null;
     };
-  }, [onLocationSelect, readOnly]); // Add dependencies so it reinstantiates properly if these change slightly, but usually they are stable
+  }, []); // Run only once on mount
 
   // Effect to sync selectedLocation pin
   const selectedMarkerRef = useRef<L.Marker | null>(null);
@@ -184,7 +231,7 @@ export default function InteractiveMap({ onLocationSelect, selectedLocation, cor
         const iconHtml = `
           <div class="flex flex-col items-center justify-center -translate-y-3">
             <div class="game-marker" style="background-color: #ffcc00; width: 20px; height: 20px; border: 2px solid white; box-shadow: 0 0 15px #ffcc00;"></div>
-            <span class="text-[10px] font-bold uppercase tracking-widest text-[#ffcc00] mt-1 bg-black/80 px-1 border border-[#ffcc00]/30 rounded whitespace-nowrap" style="font-family: 'Rajdhani', sans-serif;">Your Mark</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-[#ffcc00] mt-1 bg-black/80 px-1 border border-[#ffcc00]/30 rounded whitespace-nowrap">Your Mark</span>
           </div>
         `;
         const customIcon = L.divIcon({
@@ -208,7 +255,7 @@ export default function InteractiveMap({ onLocationSelect, selectedLocation, cor
         const iconHtml = `
           <div class="flex flex-col items-center justify-center -translate-y-3 relative z-50">
             <div style="background-color: #22c55e; width: 24px; height: 24px; border: 2px solid white; box-shadow: 0 0 20px #22c55e; border-radius: 50%;"></div>
-            <span class="text-[11px] font-bold uppercase tracking-widest text-[#22c55e] mt-1 bg-black/90 px-2 py-0.5 border border-[#22c55e]/50 rounded whitespace-nowrap" style="font-family: 'Rajdhani', sans-serif;">Actual Target</span>
+            <span class="text-[11px] font-bold uppercase tracking-widest text-[#22c55e] mt-1 bg-black/90 px-2 py-0.5 border border-[#22c55e]/50 rounded whitespace-nowrap">Actual Target</span>
           </div>
         `;
         const customIcon = L.divIcon({

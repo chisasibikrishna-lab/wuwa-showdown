@@ -63,6 +63,7 @@ interface TournamentContextValue {
   startChallengeLobby: (roomId: string, challengeId: string) => void;
   launchChallenge: (roomId: string, challengeId: string) => void;
   endChallenge: (roomId: string, challengeId: string) => void;
+  clearActiveChallenge: (roomId: string) => void;
 
   setPlayerLoadedAssets: (roomId: string, playerId: number, loaded: boolean) => void;
   setPlayerReady: (roomId: string, playerId: number, ready: boolean) => void;
@@ -131,6 +132,7 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
   const startChallengeLobby = (roomId: string, challengeId: string) => socket?.emit("START_CHALLENGE_LOBBY", { roomId, challengeId });
   const launchChallenge = (roomId: string, challengeId: string) => socket?.emit("LAUNCH_CHALLENGE", { roomId, challengeId });
   const endChallenge = (roomId: string, challengeId: string) => socket?.emit("END_CHALLENGE", { roomId, challengeId });
+  const clearActiveChallenge = (roomId: string) => socket?.emit("CLEAR_ACTIVE_CHALLENGE", roomId);
   const setPlayerLoadedAssets = (roomId: string, playerId: number, loaded: boolean) => socket?.emit("SET_ASSETS_LOADED", { roomId, playerId, loaded });
   const setPlayerReady = (roomId: string, playerId: number, ready: boolean) => socket?.emit("SET_READY", { roomId, playerId, ready });
   const submitChallengeGeoguess = (roomId: string, challengeId: string, playerId: number | string, guessedCoords: [number, number], timeTaken: number) => socket?.emit("SUBMIT_GEOGUESS", { roomId, challengeId, playerId, guessedCoords, timeTaken });
@@ -142,7 +144,7 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
         players, addPlayer, kickPlayer,
         rooms, createRoom, joinRoom, deleteRoom,
         addRoomPoints, removeRoomPoints, resetRoomLeaderboard,
-        createChallenge, startChallengeLobby, launchChallenge, endChallenge,
+        createChallenge, startChallengeLobby, launchChallenge, endChallenge, clearActiveChallenge,
         setPlayerLoadedAssets, setPlayerReady, submitChallengeGeoguess
       }}
     >

@@ -51,8 +51,7 @@ export default function LeaderboardPage() {
       <div className="w-full max-w-[1000px] flex flex-col items-center h-full pointer-events-auto relative">
         <button 
           onClick={handleRefresh}
-          className="absolute top-0 right-0 z-50 flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-4 py-2 rounded-lg transition-colors font-bold tracking-widest text-xs uppercase"
-          style={{ fontFamily: "'Rajdhani', sans-serif" }}
+          className="absolute top-0 right-0 z-50 flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white/50 hover:text-white px-4 py-2 rounded-lg transition-colors font-medium tracking-wide text-xs uppercase"
         >
           <RefreshCw size={14} /> Refresh
         </button>
@@ -61,8 +60,7 @@ export default function LeaderboardPage() {
         <div className="w-full flex flex-col items-center shrink-0">
           {/* Title */}
           <h1
-            className="text-[40px] md:text-[50px] italic uppercase text-center leading-none text-white drop-shadow-[0_4px_15px_rgba(0,0,0,0.5)] mb-2 md:mb-4 animate-in fade-in zoom-in duration-700"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+            className="text-[40px] md:text-[50px] italic uppercase text-center leading-none text-white drop-shadow-[0_4px_15px_rgba(0,0,0,0.5)] mb-2 md:mb-4 animate-in fade-in zoom-in duration-700 font-bold"
           >
             Tournament{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#ffcc00] to-[#b38f00]">Leaderboard</span>
@@ -101,8 +99,7 @@ export default function LeaderboardPage() {
           >
             <style dangerouslySetInnerHTML={{ __html: `.overflow-y-auto::-webkit-scrollbar { display: none; }` }} />
             <h3
-              className="text-[#8b92a5] font-bold tracking-[0.2em] uppercase text-center mb-2 text-xs shrink-0"
-              style={{ fontFamily: "'Rajdhani', sans-serif" }}
+              className="text-[#8b92a5] font-semibold tracking-[0.2em] uppercase text-center mb-2 text-xs shrink-0"
             >
               Contenders
             </h3>
@@ -112,18 +109,17 @@ export default function LeaderboardPage() {
                 className="flex items-center shrink-0 justify-between px-4 py-2 bg-[#161922]/80 border border-white/5 rounded-lg hover:bg-white/[0.03] transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <span className="font-bold text-white/40 w-6 text-lg" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                  <span className="font-bold text-white/40 w-6 text-lg">
                     #{index + 4}
                   </span>
                   <img src={player.avatar} alt="avatar" className="w-6 h-6 rounded-full" />
                   <span
-                    className="font-bold tracking-wide uppercase text-white/90 text-sm"
-                    style={{ fontFamily: "'Rajdhani', sans-serif" }}
+                    className="font-semibold tracking-wide uppercase text-white/90 text-sm"
                   >
                     {player.name}
                   </span>
                 </div>
-                <span className="font-bold text-[#ffcc00] text-lg" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                <span className="font-bold text-[#ffcc00] text-lg">
                   {player.score} PTS
                 </span>
               </div>

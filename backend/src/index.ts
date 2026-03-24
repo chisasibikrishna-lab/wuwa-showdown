@@ -110,6 +110,11 @@ io.on("connection", async (socket: Socket) => {
     broadcastState();
   });
 
+  socket.on("CLEAR_ACTIVE_CHALLENGE", (roomId: string) => {
+    gameManager.clearActiveChallenge(roomId);
+    broadcastState();
+  });
+
   socket.on("SET_ASSETS_LOADED", ({ roomId, playerId, loaded }) => {
     gameManager.setPlayerLoadedAssets(roomId, playerId, loaded);
     broadcastState();

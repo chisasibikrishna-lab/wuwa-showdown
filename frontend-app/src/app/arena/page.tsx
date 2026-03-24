@@ -52,7 +52,7 @@ export default function ArenaPage() {
     if (user && upCode) {
       const foundRoom = rooms.find(r => r.code === upCode);
       if (foundRoom) {
-        joinRoom(upCode, user as any); // Cast slightly ok since ids changed from num to str, handled by backend
+        joinRoom(upCode, user as any);
         setActiveRoomId(foundRoom.id);
         setGuessCoords(null);
       } else {
@@ -128,17 +128,17 @@ export default function ArenaPage() {
     if (activeRoomId && activeChallenge && guessCoords && user && activeChallenge.startedAt && !myResult && !hasSubmitted) {
         const elapsed = calculateElapsedSeconds(activeChallenge.startedAt);
         submitChallengeGeoguess(activeRoomId, activeChallenge.id, user.id, guessCoords, elapsed);
-        setSubmittedCoords(guessCoords); // Lock-in the submitted coords for post-result map
+        setSubmittedCoords(guessCoords);
         setHasSubmitted(true);
     }
   };
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen bg-[#0a0a0c] relative flex flex-col font-sans selection:bg-white/20 overflow-x-hidden">
+      <div className="min-h-screen  relative flex flex-col selection:bg-white/20 overflow-x-hidden">
         <TopNavbar />
         <div className="flex-1 flex items-center justify-center p-4">
-          <div className="text-white p-20 text-center font-bold uppercase font-mono animate-pulse">Loading...</div>
+          <div className="text-white/60 p-20 text-center font-medium text-sm tracking-wide animate-pulse">Loading...</div>
         </div>
       </div>
     );
@@ -146,49 +146,57 @@ export default function ArenaPage() {
 
   if (!activeRoomId) {
     return (
-      <div className="min-h-screen bg-[#0a0a0c] relative flex flex-col font-sans selection:bg-white/20 overflow-x-hidden">
+      <div className="min-h-screen  relative flex flex-col selection:bg-white/20 overflow-x-hidden">
         <TopNavbar />
         <div className="flex-1 flex items-center justify-center p-4">
-          <div className="bg-[#161922]/90 border border-white/10 rounded-2xl p-8 max-w-md w-full shadow-2xl backdrop-blur-md animate-in slide-in-from-bottom-8 duration-500 relative overflow-hidden">
-             <div className="absolute top-0 left-0 w-full h-2 bg-[#ffcc00]" />
+          <div className="bg-[#111318] border border-white/[0.06] rounded-2xl p-10 max-w-[420px] w-full shadow-2xl shadow-black/50 relative overflow-hidden">
+             {/* Top accent line */}
+             <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ffcc00] via-[#ffcc00] to-[#ffcc00]/40" />
              
-             <h1 className="text-4xl text-white font-bold tracking-widest uppercase mb-2 flex items-center gap-3" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-               <LogIn size={28} className="text-[#ffcc00]" /> Join Room
-             </h1>
-             <p className="text-white/40 font-mono text-sm mb-8 leading-relaxed">Enter the room code provided by the Admin.</p>
+             {/* Header */}
+             <div className="flex items-center gap-3 mb-2 mt-2">
+               <div className="w-10 h-10 rounded-xl bg-[#ffcc00]/10 border border-[#ffcc00]/20 flex items-center justify-center">
+                 <LogIn size={20} className="text-[#ffcc00]" />
+               </div>
+               <h1 className="text-2xl text-white font-semibold tracking-tight">
+                 Join Room
+               </h1>
+             </div>
+             <p className="text-white/40 text-sm mb-8 leading-relaxed">
+               Enter the room code provided by the Admin.
+             </p>
 
              {errorStatus && (
-               <div className="bg-red-500/10 border border-red-500/50 text-red-500 font-bold font-mono text-sm p-3 mb-6 rounded flex items-center gap-2">
-                 <AlertTriangle size={16} /> {errorStatus}
+               <div className="bg-red-500/8 border border-red-500/20 text-red-400 font-medium text-sm p-3.5 mb-6 rounded-xl flex items-center gap-2.5">
+                 <AlertTriangle size={16} className="shrink-0" /> {errorStatus}
                </div>
              )}
 
-             <form onSubmit={handleConnect} className="flex flex-col gap-6">
+             <form onSubmit={handleConnect} className="flex flex-col gap-5">
                 <div className="flex flex-col gap-2">
-                   <label className="text-white/60 font-bold uppercase tracking-widest text-sm" style={{ fontFamily: "'Rajdhani', sans-serif" }}>Logged In As</label>
-                   <div className="flex items-center gap-3 p-3 rounded border bg-[#ffcc00]/10 border-[#ffcc00]/50 text-[#ffcc00]">
-                      <img src={user.avatar} className="w-8 h-8 rounded-full border border-[#ffcc00]" />
-                      <span className="font-bold tracking-widest uppercase font-mono">{user.name}</span>
+                   <label className="text-white/50 font-medium text-xs tracking-wide uppercase">Logged In As</label>
+                   <div className="flex items-center gap-3 p-3.5 rounded-xl border bg-[#ffcc00]/5 border-[#ffcc00]/15 text-[#ffcc00]">
+                      <img src={user.avatar} className="w-8 h-8 rounded-full border border-[#ffcc00]/30" />
+                      <span className="font-semibold tracking-wide text-sm">{user.name}</span>
                    </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                   <label className="text-white/60 font-bold uppercase tracking-widest text-sm" style={{ fontFamily: "'Rajdhani', sans-serif" }}>Enter Access Code</label>
+                   <label className="text-white/50 font-medium text-xs tracking-wide uppercase">Enter Access Code</label>
                    <input
                      type="text"
                      placeholder="e.g. A1B2C3"
                      maxLength={6}
                      value={roomCode}
                      onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                     className="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-3 text-white font-mono text-xl tracking-[0.2em] outline-none focus:border-[#ffcc00]/50 text-center uppercase shadow-inner"
+                     className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white font-mono text-lg tracking-[0.25em] outline-none focus:border-[#ffcc00]/40 focus:bg-white/[0.05] text-center uppercase transition-all duration-200 placeholder:text-white/20"
                    />
                 </div>
 
                 <button
                   type="submit"
                   disabled={roomCode.length < 3}
-                  className="w-full bg-[#ffcc00] hover:bg-[#ffdf4d] text-black px-8 py-4 rounded-xl font-bold tracking-widest uppercase text-lg transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,204,0,0.2)] hover:shadow-[0_0_30px_rgba(255,204,0,0.4)] mt-2"
-                  style={{ fontFamily: "'Rajdhani', sans-serif" }}
+                  className="w-full bg-[#ffcc00] hover:bg-[#ffe066] text-black px-8 py-3.5 rounded-xl font-semibold tracking-wide text-[15px] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_24px_rgba(255,204,0,0.15)] hover:shadow-[0_0_32px_rgba(255,204,0,0.25)] mt-1"
                 >
                   Join Game
                 </button>
@@ -200,137 +208,134 @@ export default function ArenaPage() {
   }
 
   // Connected to Room UI checks
-  if (!room) return <div className="text-white p-20 text-center font-bold tracking-widest uppercase font-mono animate-pulse">Connecting to Server...</div>;
-  if (!myPlayer) return <div className="text-white p-20 text-center font-bold tracking-widest uppercase font-mono animate-pulse">Waiting for Admin...</div>;
+  if (!room) return <div className="text-white/50 p-20 text-center font-medium text-sm tracking-wide animate-pulse">Connecting to Server...</div>;
+  if (!myPlayer) return <div className="text-white/50 p-20 text-center font-medium text-sm tracking-wide animate-pulse">Waiting for Admin...</div>;
 
   return (
-    <div className="min-h-screen mt-4 bg-[#0a0a0c] relative flex flex-col font-sans selection:bg-white/20 overflow-x-hidden">
-      <div className="fixed inset-0 z-0 opacity-[0.1] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at center, #ffffff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+    <div className=" relative flex flex-col justify-center selection:bg-white/20 overflow-x-hidden">
+      <div className="fixed inset-0 z-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at center, #ffffff 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
       <TopNavbar />
 
-      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 flex flex-col items-center">
         {/* Header HUD */}
-        <div className="w-full flex justify-between items-center bg-[#161922] border border-white/5 px-6 py-4 rounded-xl shadow-lg mb-8">
+        <div className="w-full mt-[10vh] flex justify-between items-center bg-[#111318] border border-white/[0.06] px-6 py-5 rounded-2xl shadow-xl shadow-black/30 mb-8">
            <div className="flex items-center gap-4">
-              <img src={myPlayer.avatar} alt="Profile" className="w-12 h-12 rounded-full border border-[#ffcc00]/50 shadow-[0_0_10px_rgba(255,204,0,0.3)]" />
+              <img src={myPlayer.avatar} alt="Profile" className="w-11 h-11 rounded-full border border-[#ffcc00]/30 shadow-[0_0_12px_rgba(255,204,0,0.15)]" />
               <div>
-                 <div className="text-white font-bold tracking-widest uppercase text-xl" style={{ fontFamily: "'Rajdhani', sans-serif" }}>{myPlayer.name}</div>
-                 <div className="text-[#ffcc00] font-mono text-sm uppercase">Total PTS: <span className="font-bold">{myPlayer.roomScore}</span></div>
+                 <div className="text-white font-semibold tracking-tight text-lg">{myPlayer.name}</div>
+                 <div className="text-[#ffcc00] font-mono text-xs tracking-wide mt-0.5">TOTAL PTS: <span className="font-bold">{myPlayer.roomScore}</span></div>
               </div>
            </div>
            <div className="text-right">
-              <div className="text-white/40 font-bold tracking-widest text-xs uppercase font-mono mb-1">Network: {room.name}</div>
-              <div className="bg-black/60 border border-white/10 px-3 py-1 rounded font-mono text-[#ffcc00] font-bold tracking-widest shadow-inner text-sm">{room.code}</div>
+              <div className="text-white/30 font-medium tracking-wide text-xs uppercase mb-1.5">{room.name}</div>
+              <div className="bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-lg font-mono text-[#ffcc00] font-semibold tracking-[0.15em] text-sm">{room.code}</div>
            </div>
         </div>
 
         {/* Dynamic States */}
         {!activeChallenge ? (
-          <div className="flex flex-col items-center justify-center py-20 border border-white/5 bg-[#161922]/50 rounded-2xl w-full max-w-3xl shadow-xl animate-in zoom-in-95 duration-500 backdrop-blur-md">
-            <MonitorPlay size={64} className="text-white/10 mb-6" />
-            <h2 className="text-3xl text-white font-bold tracking-widest uppercase mb-2" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>Standby Mode</h2>
-            <p className="text-white/40 font-mono text-center max-w-sm">No operation is currently active. Await instruction from the Game Master.</p>
+          <div className="flex flex-col items-center justify-center py-24 border border-white/[0.04] bg-[#111318]/60 rounded-2xl w-full max-w-3xl shadow-xl backdrop-blur-sm">
+            <MonitorPlay size={56} className="text-white/[0.06] mb-6" />
+            <h2 className="text-2xl text-white font-semibold tracking-tight mb-2">Standby Mode</h2>
+            <p className="text-white/35 text-sm text-center max-w-sm leading-relaxed">No operation is currently active. Await instruction from the Game Master.</p>
           </div>
         ) : activeChallenge.status === 'waiting' ? (
-          <div className="flex flex-col items-center justify-center py-16 border border-[#ffcc00]/20 bg-[#ffcc00]/5 rounded-2xl w-full max-w-3xl shadow-[0_0_40px_rgba(255,204,0,0.05)] animate-in slide-in-from-bottom-8 duration-500 backdrop-blur-md relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-[#ffcc00] opacity-50 shadow-[0_0_15px_#ffcc00]" />
-            <Lock size={64} className="text-[#ffcc00] mb-6 opacity-80" />
-            <h2 className="text-4xl text-white font-bold tracking-widest uppercase mb-4 drop-shadow-[0_0_10px_rgba(255,204,0,0.3)]" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>Mission Pre-check</h2>
-            <p className="text-white/60 font-mono text-center max-w-md mb-8">Intelligence packets have been dispatched. Complete pre-flight checks to clear launch status.</p>
+          <div className="flex flex-col items-center justify-center py-16 border border-[#ffcc00]/15 bg-[#ffcc00]/[0.02] rounded-2xl w-full max-w-3xl shadow-xl backdrop-blur-sm relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffcc00] to-transparent opacity-60" />
+            <Lock size={52} className="text-[#ffcc00]/70 mb-6" />
+            <h2 className="text-3xl text-white font-semibold tracking-tight mb-3">Mission Pre-check</h2>
+            <p className="text-white/45 text-sm text-center max-w-md mb-10 leading-relaxed">Intelligence packets have been dispatched. Complete pre-flight checks to clear launch status.</p>
             
-            <div className="flex flex-col gap-4 w-full max-w-sm">
+            <div className="flex flex-col  gap-3 w-full max-w-sm">
                <button
                  onClick={() => setPlayerLoadedAssets(room.id, myPlayer.id, true)}
                  disabled={myPlayer.hasLoadedAssets}
-                 className={`flex items-center justify-center gap-3 w-full py-4 rounded-xl font-bold tracking-widest uppercase transition-all ${myPlayer.hasLoadedAssets ? 'bg-green-500/20 text-green-500 border border-green-500/50' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
-                 style={{ fontFamily: "'Rajdhani', sans-serif" }}
+                 className={`flex items-center justify-center gap-3 w-full py-4 rounded-xl font-medium tracking-wide text-sm transition-all duration-200 ${myPlayer.hasLoadedAssets ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/[0.08]'}`}
                >
-                 {myPlayer.hasLoadedAssets ? <><CheckCircle2 size={20} /> Assets Loaded</> : <><Download size={20} /> Compile Intelligence</>}
+                 {myPlayer.hasLoadedAssets ? <><CheckCircle2 size={18} /> Assets Loaded</> : <><Download size={18} /> Compile Intelligence</>}
                </button>
 
                <button
                  onClick={() => setPlayerReady(room.id, myPlayer.id, true)}
                  disabled={!myPlayer.hasLoadedAssets || myPlayer.isReady}
-                 className={`flex items-center justify-center gap-3 w-full py-4 rounded-xl font-bold tracking-widest uppercase transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] ${myPlayer.isReady ? 'bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/50' : myPlayer.hasLoadedAssets ? 'bg-[#ffcc00] hover:bg-[#ffdf4d] text- কালো' : 'bg-black/40 text-white/20 border border-white/5'}`}
-                 style={{ fontFamily: "'Rajdhani', sans-serif" }}
+                 className={`flex items-center justify-center gap-3 w-full py-4 rounded-xl font-medium tracking-wide text-sm transition-all duration-200 ${myPlayer.isReady ? 'bg-[#ffcc00]/10 text-[#ffcc00] border border-[#ffcc00]/20' : myPlayer.hasLoadedAssets ? 'bg-[#ffcc00] hover:bg-[#ffe066] text-black' : 'bg-white/[0.02] text-white/20 border border-white/[0.04]'}`}
                >
-                 {myPlayer.isReady ? <><CheckCircle2 size={20} /> Ready for Launch</> : <><Target size={20} /> Confirm Ready</>}
+                 {myPlayer.isReady ? <><CheckCircle2 size={18} /> Ready for Launch</> : <><Target size={18} /> Confirm Ready</>}
                </button>
             </div>
           </div>
         ) : activeChallenge.status === 'active' || activeChallenge.status === 'completed' ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full ">
             {/* Left Panel: Inputs & Target Image OR Results */}
             <div className="lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1 h-full">
               {myResult || activeChallenge.status === 'completed' ? (
-                 <div className="bg-[#161922]/90 border border-[#ffcc00]/30 rounded-2xl p-8 shadow-xl backdrop-blur-md flex flex-col items-center justify-center text-center shadow-[0_0_30px_rgba(255,204,0,0.1)] h-full overflow-hidden min-h-[500px]">
-                  <CheckCircle2 size={64} className="text-[#ffcc00] mb-4" />
-                  <h2 className="text-3xl lg:text-4xl text-white font-bold tracking-widest uppercase mb-4" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                    Submission Locked!
+                 <div className="bg-[#111318] border border-[#ffcc00]/15 rounded-2xl p-8 shadow-xl flex flex-col items-center justify-center text-center h-full overflow-hidden min-h-[500px]">
+                  <CheckCircle2 size={52} className="text-[#ffcc00]/80 mb-5" />
+                  <h2 className="text-2xl lg:text-3xl text-white font-semibold tracking-tight mb-4">
+                    Submission Locked
                   </h2>
                   
                   {myResult ? (
-                    <div className="flex flex-col gap-3 mt-4 text-white/80 font-mono text-lg bg-black/40 border border-white/10 p-5 rounded-xl w-full">
-                      <div className="flex flex-col sm:flex-row justify-between items-center py-2 border-b border-white/10">
-                        <span className="text-white/50 text-sm">Target Drift:</span>
-                        <span className="text-white font-bold">{Math.round(myResult.distance)} Units</span>
+                    <div className="flex flex-col gap-0 mt-2 w-full bg-white/[0.02] border border-white/[0.06] rounded-xl overflow-hidden">
+                      <div className="flex justify-between items-center px-5 py-4 border-b border-white/[0.05]">
+                        <span className="text-white/40 text-sm">Target Drift</span>
+                        <span className="text-white font-semibold text-sm">{Math.round(myResult.distance)} Units</span>
                       </div>
-                      <div className="flex flex-col sm:flex-row justify-between items-center py-2 border-b border-white/10">
-                        <span className="text-white/50 text-sm">Action Time:</span>
-                        <span className="text-white font-bold">{myResult.timeTaken}s</span>
+                      <div className="flex justify-between items-center px-5 py-4 border-b border-white/[0.05]">
+                        <span className="text-white/40 text-sm">Action Time</span>
+                        <span className="text-white font-semibold text-sm">{myResult.timeTaken}s</span>
                       </div>
-                      <div className="flex flex-col sm:flex-row justify-between items-center py-2 pt-4">
-                        <span className="text-white/50 text-sm">Reward:</span>
-                        <span className="text-[#ffcc00] text-4xl lg:text-5xl font-bold drop-shadow-[0_0_10px_rgba(255,204,0,0.5)] bg-[#ffcc00]/10 px-4 py-1 rounded">+{myResult.points}</span>
+                      <div className="flex justify-between items-center px-5 py-5">
+                        <span className="text-white/40 text-sm">Reward</span>
+                        <span className="text-[#ffcc00] text-3xl font-bold">+{myResult.points}</span>
                       </div>
                     </div>
                   ) : (
-                    <div className="mt-4 text-red-400 font-mono bg-red-500/10 p-4 border border-red-500/20 rounded-xl">
+                    <div className="mt-4 text-red-400/80 text-sm bg-red-500/5 p-4 border border-red-500/10 rounded-xl leading-relaxed">
                        You timed out and gained 0 points for this operation.
                     </div>
                   )}
 
-                  <p className="text-[#ffcc00]/60 text-sm mt-8 pt-4 w-full font-bold tracking-widest uppercase border-t border-white/10" style={{ fontFamily: "'Rajdhani', sans-serif" }}>
+                  <p className="text-white/25 text-xs mt-8 pt-4 w-full font-medium tracking-wide uppercase border-t border-white/[0.05]">
                     Standby for next broadcast
                   </p>
                 </div>
               ) : (
-                <div className="bg-[#161922]/90 border border-red-500/30 rounded-2xl p-6 shadow-xl backdrop-blur-md flex flex-col gap-4 relative overflow-hidden h-fit">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-red-500 opacity-60 shadow-[0_0_15px_#ef4444]" />
+                <div className="bg-[#111318] border border-red-500/15 rounded-2xl p-6 shadow-xl flex flex-col gap-4 relative overflow-hidden h-fit">
+                    <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-50" />
                     
-                    <div className="flex justify-between items-center mb-2">
-                       <h3 className="text-white font-bold uppercase tracking-widest text-lg flex items-center gap-2" style={{ fontFamily: "'Rajdhani', sans-serif" }}>
-                         <MonitorPlay size={18} className="text-red-400" /> OPERATION ACTIVE
+                    <div className="flex justify-between items-center mb-1">
+                       <h3 className="text-white font-semibold text-sm tracking-wide flex items-center gap-2 uppercase">
+                         <MonitorPlay size={16} className="text-red-400" /> Operation Active
                        </h3>
-                       <div className={`font-mono font-bold text-xl px-3 py-1 bg-black/50 border rounded flex items-center gap-2 ${timeLeft <= 10 ? 'text-red-500 border-red-500/50 animate-pulse' : 'text-[#ffcc00] border-[#ffcc00]/30'}`}>
-                          <Timer size={18} /> 00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
+                       <div className={`font-mono font-semibold text-lg px-3 py-1.5 bg-black/40 border rounded-lg flex items-center gap-2 ${timeLeft <= 10 ? 'text-red-400 border-red-500/30 animate-pulse' : 'text-[#ffcc00] border-[#ffcc00]/20'}`}>
+                          <Timer size={16} /> 00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
                        </div>
                     </div>
                     
-                    <div className="relative w-full aspect-video rounded-xl overflow-hidden border-2 border-white/10 bg-black/60 flex items-center justify-center shadow-lg">
+                    <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/[0.06] bg-black/40 flex items-center justify-center shadow-lg">
                       {activeChallenge.image ? (
                         <img src={activeChallenge.image} alt="Target Intel" className="object-cover w-full h-full" />
                       ) : (
-                        <div className="text-white/20 flex flex-col items-center gap-2"><Target size={48} /><span className="font-mono text-sm">NO VISUAL</span></div>
+                        <div className="text-white/15 flex flex-col items-center gap-2"><Target size={40} /><span className="text-xs font-medium">NO VISUAL</span></div>
                       )}
                     </div>
                     
-                    <p className="text-white/40 text-sm font-mono mt-2 leading-relaxed tracking-tight">
-                       Analyze the intelligence and mark the location. Speed matters - bonus points awarded for rapid securement.
+                    <p className="text-white/30 text-sm leading-relaxed">
+                       Analyze the intelligence and mark the location. Speed matters — bonus points awarded for rapid confirmation.
                     </p>
 
-                    <div className="mt-4 pt-4 border-t border-white/10">
+                    <div className="mt-3 pt-4 border-t border-white/[0.05]">
                       <button
                         onClick={handleSubmit}
                         disabled={!guessCoords || !!myResult || hasSubmitted}
-                        className="w-full flex justify-center items-center gap-3 bg-red-500 hover:bg-red-600 disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed text-white px-4 sm:px-8 py-4 rounded-xl font-bold tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(239,68,68,0.2)] disabled:shadow-none hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]"
-                        style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                        className="w-full flex justify-center items-center gap-3 bg-red-500 hover:bg-red-600 disabled:opacity-25 disabled:cursor-not-allowed text-white px-4 sm:px-8 py-4 rounded-xl font-semibold tracking-wide text-sm transition-all duration-200 shadow-[0_0_20px_rgba(239,68,68,0.15)] disabled:shadow-none hover:shadow-[0_0_30px_rgba(239,68,68,0.3)]"
                       >
-                        <MapPin size={24} /> Submit Target Lock
+                        <MapPin size={20} /> Submit Target Lock
                       </button>
                       {!guessCoords && (
                          <div className="flex flex-wrap justify-center mt-4">
-                            <span className="px-2 py-1 bg-white/5 text-white/50 text-xs rounded border border-white/10 uppercase font-bold tracking-widest" style={{ fontFamily: "'Rajdhani', sans-serif" }}>Pending Tac-Map Pin</span>
+                            <span className="px-3 py-1.5 bg-white/[0.03] text-white/35 text-xs rounded-lg border border-white/[0.06] font-medium tracking-wide">Pending Tac-Map Pin</span>
                          </div>
                       )}
                     </div>
@@ -339,15 +344,15 @@ export default function ArenaPage() {
             </div>
 
             {/* Right Panel: Tac-Map */}
-            <div className="lg:col-span-8 flex flex-col h-[60vh] lg:h-auto lg:min-h-[700px] bg-[#161922]/90 border border-white/10 rounded-2xl p-3 shadow-2xl backdrop-blur-md relative order-1 lg:order-2">
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none bg-black/80 backdrop-blur-lg border border-[#ffcc00]/30 px-6 py-2 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.8)]">
-                <span className="text-white font-bold tracking-widest text-sm sm:text-base uppercase flex items-center gap-2 whitespace-nowrap" style={{ fontFamily: "'Rajdhani', sans-serif" }}>
-                  <MapPin size={18} className="text-[#ffcc00]" /> 
-                  <span className="text-[#ffcc00]">Target Area</span> {myResult ? "- Locked" : "- Engage"}
+            <div className="lg:col-span-8 flex flex-col h-[60vh] lg:h-auto lg:min-h-[700px] bg-[#111318] border border-white/[0.06] rounded-2xl p-3 shadow-2xl shadow-black/30 relative order-1 lg:order-2">
+              <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none bg-black/80 backdrop-blur-xl border border-[#ffcc00]/20 px-5 py-2 rounded-full shadow-xl">
+                <span className="text-white font-medium tracking-wide text-sm flex items-center gap-2 whitespace-nowrap">
+                  <MapPin size={16} className="text-[#ffcc00]" /> 
+                  <span className="text-[#ffcc00]">Target Area</span> {myResult ? "— Locked" : "— Engage"}
                 </span>
               </div>
               
-              <div className="w-full h-full rounded-xl overflow-hidden border border-white/5 bg-[#053446ff] relative shadow-inner">
+              <div className="w-full h-full rounded-xl overflow-hidden border border-white/[0.04] bg-[#053446ff] relative shadow-inner">
                 <InteractiveMap 
                   selectedLocation={submittedCoords || guessCoords} 
                   onLocationSelect={myResult ? () => {} : setGuessCoords} 

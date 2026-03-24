@@ -190,3 +190,4 @@ yarn-error.log*
 # Project-specific
 # ──────────────────────────────────────────────
 reference.jsx
+implementation_plan.md
