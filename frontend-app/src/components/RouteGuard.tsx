@@ -13,8 +13,9 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
     if (isLoading) return;
 
     const isAuthPage = pathname === "/login" || pathname === "/register";
+    const isPublicBracket = pathname.startsWith("/bracket/") && pathname !== "/bracket/create";
 
-    if (!user && !isAuthPage) {
+    if (!user && !isAuthPage && !isPublicBracket) {
       setAuthorized(false);
       router.push("/login");
     } else if (user && isAuthPage) {

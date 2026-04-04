@@ -7,14 +7,17 @@ import { gameManager } from "./store/GameStore";
 import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes";
 import historyRoutes from "./routes/historyRoutes";
+import bracketRoutes from "./routes/bracketRoutes";
 import { RoomRecord } from "./models/RoomRecord";
 import { ChallengeRecord } from "./models/ChallengeRecord";
+import { Bracket } from "./models/Bracket";
 
 const app = express();
-app.use(cors({ origin: config.FRONTEND_URL, methods: ["GET", "POST", "DELETE"] }));
+app.use(cors({ origin: config.FRONTEND_URL, methods: ["GET", "POST", "PUT", "DELETE"] }));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/history", historyRoutes);
+app.use("/api/brackets", bracketRoutes);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -231,6 +234,85 @@ io.on("connection", async (socket: Socket) => {
       if (challenge?.status === "completed") {
         await persistChallengeRecord(roomId, challengeId);
       }
+    }
+  });
+
+  // ─── Bracket Real-Time Events ───
+  socket.on("BRACKET_JOIN", ({ shareCode }: { shareCode: string }) => {
+    socket.join(`bracket:${shareCode}`);
+  });
+
+  socket.on("BRACKET_LEAVE", ({ shareCode }: { shareCode: string }) => {
+    socket.leave(`bracket:${shareCode}`);
+  });
+
+  socket.on("BRACKET_SET_WINNER", async ({ bracketId, matchId, winnerSeed }: { bracketId: string; matchId: string; winnerSeed: number }) => {
+    if (socket.data.user?.role !== "admin") return;
+    try {
+      const { advanceWinner: advWinner } = await import("./utils/bracketGenerator");
+      const bracket = await Bracket.findById(bracketId);
+      if (!bracket || bracket.status !== "active") return;
+
+      const matches = bracket.matches as any[];
+      const match = matches.find((m: any) => m.matchId === matchId);
+      if (!match || match.participant1Seed === null || match.participant2Seed === null) return;
+
+      match.winnerSeed = winnerSeed;
+      match.status = "completed";
+      const loserSeed = match.participant1Seed === winnerSeed ? match.participant2Seed : match.participant1Seed;
+      advWinner(matches, matchId, winnerSeed, loserSeed, bracket.type as "single" | "double");
+
+      // Check completion
+      if (bracket.type === "single") {
+        const wm = matches.filter((m: any) => m.bracket === "winners");
+        const finalMatch = wm.reduce((a: any, b: any) => a.round > b.round ? a : b);
+        if (finalMatch.winnerSeed !== null) {
+          bracket.status = "completed";
+          const champ = bracket.participants.find((p: any) => p.seed === finalMatch.winnerSeed);
+          bracket.champion = champ?.name || null;
+        }
+      } else {
+        const gf0 = matches.find((m: any) => m.matchId === "GF-M0");
+        const gf1 = matches.find((m: any) => m.matchId === "GF-M1");
+        if (gf0?.winnerSeed !== null) {
+          if (gf0.winnerSeed === gf0.participant1Seed) {
+            bracket.status = "completed";
+            const champ = bracket.participants.find((p: any) => p.seed === gf0.winnerSeed);
+            bracket.champion = champ?.name || null;
+          } else if (gf1?.winnerSeed !== null) {
+            bracket.status = "completed";
+            const champ = bracket.participants.find((p: any) => p.seed === gf1.winnerSeed);
+            bracket.champion = champ?.name || null;
+          }
+        }
+      }
+
+      bracket.markModified("matches");
+      await bracket.save();
+      io.to(`bracket:${bracket.shareCode}`).emit("BRACKET_UPDATE", bracket);
+    } catch (e) {
+      console.error("[Bracket Socket] Set winner error:", e);
+    }
+  });
+
+  socket.on("BRACKET_UNDO_WINNER", async ({ bracketId, matchId }: { bracketId: string; matchId: string }) => {
+    if (socket.data.user?.role !== "admin") return;
+    try {
+      const { undoWinner: undoW } = await import("./utils/bracketGenerator");
+      const bracket = await Bracket.findById(bracketId);
+      if (!bracket) return;
+
+      undoW(bracket.matches as any[], matchId, bracket.type as "single" | "double");
+      if (bracket.status === "completed") {
+        bracket.status = "active";
+        bracket.champion = null;
+      }
+
+      bracket.markModified("matches");
+      await bracket.save();
+      io.to(`bracket:${bracket.shareCode}`).emit("BRACKET_UPDATE", bracket);
+    } catch (e) {
+      console.error("[Bracket Socket] Undo error:", e);
     }
   });
 

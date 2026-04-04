@@ -64,6 +64,7 @@ const baseNavItems = [
   // { label: "LEADERBOARD", href: "/leaderboard" },
   { label: "MAP", href: "/map" },
   { label: "ARENA", href: "/arena" },
+  { label: "BRACKET", href: "/bracket" },
 ];
 
 export default function TopNavbar() {

@@ -3,6 +3,7 @@ import BaseLayout from "@/components/BaseLayout";
 import { TournamentProvider } from "@/context/TournamentContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { HistoryProvider } from "@/context/HistoryContext";
+import { BracketProvider } from "@/context/BracketContext";
 import RouteGuard from "@/components/RouteGuard";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -29,9 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <TournamentProvider>
             <HistoryProvider>
-              <RouteGuard>
-                <BaseLayout>{children}</BaseLayout>
-              </RouteGuard>
+              <BracketProvider>
+                <RouteGuard>
+                  <BaseLayout>{children}</BaseLayout>
+                </RouteGuard>
+              </BracketProvider>
             </HistoryProvider>
           </TournamentProvider>
         </AuthProvider>

@@ -26,18 +26,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem("wuwa_token");
-    const savedUser = localStorage.getItem("wuwa_user");
-    
-    if (savedToken && savedUser) {
-      try {
-        setToken(savedToken);
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        console.error("Failed to parse user session", e);
+    const initAuth = async () => {
+      const savedToken = localStorage.getItem("wuwa_token");
+      const savedUser = localStorage.getItem("wuwa_user");
+      
+      if (savedToken && savedUser) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"}/api/auth/me`, {
+            headers: { Authorization: `Bearer ${savedToken}` }
+          });
+          
+          if (res.ok) {
+            const data = await res.json();
+            setToken(savedToken);
+            setUser(data.user);
+          } else {
+            // Token is invalid, clean up local storage
+            localStorage.removeItem("wuwa_token");
+            localStorage.removeItem("wuwa_user");
+          }
+        } catch (e) {
+          // If network error, optimistically load the saved state to allow offline usage
+          console.error("Failed to validate user session", e);
+          try {
+            setToken(savedToken);
+            setUser(JSON.parse(savedUser));
+          } catch (err) {
+            // Ignored
+          }
+        }
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    };
+
+    initAuth();
   }, []);
 
   const login = (newToken: string, newUser: User) => {
