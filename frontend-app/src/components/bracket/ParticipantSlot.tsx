@@ -61,10 +61,10 @@ export default function ParticipantSlot({
             ? "cursor-grab active:cursor-grabbing hover:bg-white/[0.12] active:bg-white/[0.15]" 
             : isClickable ? "cursor-pointer hover:bg-white/[0.08]" : "cursor-default"
         }
-        ${isDragging && !isOverlay ? "opacity-30 scale-105 shadow-[0_0_20px_rgba(255,204,0,0.4)] ring-2 ring-[#ffcc00] z-50 bg-[#0a0a0c]/80 backdrop-blur-sm" : ""}
-        ${isOver && !isOverlay ? "bg-[#ffcc00]/20 ring-2 ring-[#ffcc00]/60 scale-105 shadow-lg" : ""}
+        ${isDragging && !isOverlay ? "opacity-30 scale-105 shadow-primary-md ring-2 ring-primary z-50 bg-[#0a0a0c]/80 backdrop-blur-sm" : ""}
+        ${isOver && !isOverlay ? "bg-primary/20 ring-2 ring-primary/60 scale-105 shadow-lg" : ""}
         ${isWinner
-          ? "bg-[#ffcc00]/15 text-[#ffcc00] font-semibold"
+          ? "bg-primary/15 text-primary font-semibold"
           : isLoser
             ? "opacity-40 text-zinc-500"
             : isBye
@@ -77,7 +77,7 @@ export default function ParticipantSlot({
       {seed !== null && !isBye && (
         <span className={`
           text-[10.5px] font-bold w-5 h-5 rounded flex items-center justify-center shrink-0
-          ${isWinner ? "bg-[#ffcc00]/20 text-[#ffcc00]" : "bg-zinc-700/50 text-zinc-300 font-mono"}
+          ${isWinner ? "bg-primary/20 text-primary" : "bg-zinc-700/50 text-zinc-300 font-mono"}
         `}>
           {seed}
         </span>
@@ -93,7 +93,7 @@ export default function ParticipantSlot({
         <span className={`
           text-xs font-bold px-1.5 py-0.5 rounded min-w-[22px] text-center shrink-0
           ${isWinner
-            ? "bg-[#ffcc00]/20 text-[#ffcc00]"
+            ? "bg-primary/20 text-primary"
             : "bg-zinc-800 text-zinc-400"
           }
         `}>
@@ -103,7 +103,7 @@ export default function ParticipantSlot({
 
       {/* Winner dot */}
       {isWinner && (
-        <div className="w-1.5 h-1.5 rounded-full bg-[#ffcc00] shadow-[0_0_6px_rgba(255,204,0,0.6)] shrink-0" />
+        <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-primary-xs shrink-0" />
       )}
     </button>
   );

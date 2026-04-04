@@ -38,8 +38,8 @@ export default function LiveMissionFeed({
   const pendingPlayers = room.pendingPlayers || [];
 
   return (
-    <div className={`border rounded-2xl p-8 md:p-10 shadow-[0_0_40px_rgba(0,0,0,0.6)] backdrop-blur-2xl relative overflow-hidden transition-all duration-500 ${activeChallenge.status === 'waiting' ? 'bg-black/40 border-[#ffcc00]/20' : 'bg-black/40 border-red-500/20'}`}>
-      <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-current to-transparent opacity-40 ${activeChallenge.status === 'waiting' ? 'text-[#ffcc00]' : 'text-red-500'}`} />
+    <div className={`border rounded-2xl p-8 md:p-10 shadow-[0_0_40px_rgba(0,0,0,0.6)] backdrop-blur-2xl relative overflow-hidden transition-all duration-500 ${activeChallenge.status === 'waiting' ? 'bg-black/40 border-primary/20' : 'bg-black/40 border-red-500/20'}`}>
+      <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-current to-transparent opacity-40 ${activeChallenge.status === 'waiting' ? 'text-primary' : 'text-red-500'}`} />
 
       <div className="flex flex-col items-center text-center w-full">
         {activeChallenge.status === 'waiting' ? (
@@ -99,7 +99,7 @@ export default function LiveMissionFeed({
             <div className="w-full max-w-2xl bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5 mb-10 max-h-[300px] overflow-y-auto text-left">
               <div className="flex justify-between items-center border-b border-white/[0.06] pb-4 mb-4 sticky top-0 backdrop-blur-md z-10 pt-1 -mt-1">
                 <span className="text-white/40 font-medium text-xs tracking-wide uppercase flex items-center gap-2"><Users size={14} /> Roster Readiness</span>
-                <span className={`font-semibold font-mono px-3 py-1 rounded-lg text-xs ${allReady ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/15' : 'bg-[#ffcc00]/10 text-[#ffcc00] border border-[#ffcc00]/15'}`}>
+                <span className={`font-semibold font-mono px-3 py-1 rounded-lg text-xs ${allReady ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/15' : 'bg-primary/10 text-primary border border-primary/15'}`}>
                   {room.players.filter(p => p.isReady).length} / {room.players.length} READY
                 </span>
               </div>
@@ -114,7 +114,7 @@ export default function LiveMissionFeed({
                     <div className="flex gap-3 items-center">
                       <div className="flex items-center gap-2 bg-black/30 px-3 py-1.5 rounded-lg border border-white/[0.04]">
                         <span className="text-xs text-white/30 tracking-wide">Ready</span>
-                        {p.isReady ? <CheckCircle size={15} className="text-[#ffcc00]" /> : <div className="w-4 h-4 border-2 border-white/15 rounded-full" />}
+                        {p.isReady ? <CheckCircle size={15} className="text-primary" /> : <div className="w-4 h-4 border-2 border-white/15 rounded-full" />}
                       </div>
                       <button
                         onClick={() => onKickPlayer(p.id)}
@@ -134,7 +134,7 @@ export default function LiveMissionFeed({
             <button
               onClick={onLaunch}
               disabled={!allReady || room.players.length === 0}
-              className="bg-[#ffcc00] hover:bg-[#ffe066] disabled:opacity-40 disabled:cursor-not-allowed text-black px-12 py-4 rounded-xl font-semibold tracking-wide text-base transition-all duration-200 shadow-[0_0_30px_rgba(255,204,0,0.15)] disabled:shadow-none hover:scale-[1.02]"
+              className="bg-primary hover:bg-primary-light disabled:opacity-40 disabled:cursor-not-allowed text-black px-12 py-4 rounded-xl font-semibold tracking-wide text-base transition-all duration-200 shadow-primary-lg disabled:shadow-none hover:scale-[1.02]"
             >
               {allReady && room.players.length > 0 ? "Launch Mission" : "Waiting for Agents..."}
             </button>
@@ -175,7 +175,7 @@ export default function LiveMissionFeed({
                             Time <span className="text-white/60">{r.timeTaken}s</span>
                           </span>
                           <div className="bg-black/30 px-4 py-2 rounded-lg border border-white/[0.04] min-w-[70px] text-center">
-                            <span className="text-[#ffcc00] font-bold text-lg">+{r.points}</span>
+                            <span className="text-primary font-bold text-lg">+{r.points}</span>
                           </div>
                         </div>
                       </div>

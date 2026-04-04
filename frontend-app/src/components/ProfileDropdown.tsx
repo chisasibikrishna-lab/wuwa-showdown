@@ -2,11 +2,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { LogOut, History, ChevronDown, Shield, User } from "lucide-react";
+import { LogOut, History, ChevronDown, Shield, User, Palette } from "lucide-react";
+import ThemeSelectModal from "@/components/ThemeSelectModal";
 
 export default function ProfileDropdown() {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const [themeModalOpen, setThemeModalOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function ProfileDropdown() {
                 <p className="text-white font-semibold text-sm truncate">{user.name}</p>
                 <div className="flex items-center gap-1 mt-0.5">
                   {user.role === "admin" ? (
-                    <><Shield size={10} className="text-[#ffcc00]" /><span className="text-[#ffcc00] text-[10px] font-semibold uppercase tracking-wide">Admin</span></>
+                    <><Shield size={10} className="text-primary" /><span className="text-primary text-[10px] font-semibold uppercase tracking-wide">Admin</span></>
                   ) : (
                     <><User size={10} className="text-white/30" /><span className="text-white/30 text-[10px] font-medium uppercase tracking-wide">Player</span></>
                   )}
@@ -58,9 +60,16 @@ export default function ProfileDropdown() {
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/[0.05] transition-colors text-sm font-medium"
             >
-              <History size={15} className="text-[#ffcc00]/70" />
+              <History size={15} className="text-primary/70" />
               Match History
             </Link>
+            <button
+              onClick={() => { setThemeModalOpen(true); setOpen(false); }}
+              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/[0.05] transition-colors text-sm font-medium"
+            >
+              <Palette size={15} className="text-primary/70" />
+              Theme
+            </button>
             <button
               onClick={() => { logout(); setOpen(false); }}
               className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-white/50 hover:text-red-400 hover:bg-red-500/5 transition-colors text-sm font-medium"
@@ -71,6 +80,7 @@ export default function ProfileDropdown() {
           </div>
         </div>
       )}
+      <ThemeSelectModal open={themeModalOpen} onClose={() => setThemeModalOpen(false)} />
     </div>
   );
 }

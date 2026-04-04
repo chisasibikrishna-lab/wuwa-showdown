@@ -85,14 +85,14 @@ export default function BracketMatch({
         ${isCompleted
           ? "bg-[#0a0a0c]/60 backdrop-blur-xl border-white/[0.08]"
           : isReady
-            ? "bg-[#0a0a0c]/80 backdrop-blur-xl border-[#ffcc00]/40 shadow-[0_0_15px_rgba(255,204,0,0.15)]"
+            ? "bg-[#0a0a0c]/80 backdrop-blur-xl border-primary/40 shadow-primary-sm"
             : "bg-[#0a0a0c]/40 backdrop-blur-lg border-white/[0.05]"
         }
       `}
     >
       {/* Match header glow for ready matches */}
       {isReady && !isCompleted && (
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ffcc00] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent" />
       )}
 
       {/* Match slots container strictly for corner rounding */}
@@ -138,7 +138,7 @@ export default function BracketMatch({
             Set Score & Winner
           </div>
           <p className="text-white font-semibold text-sm mb-4 leading-tight">
-            <span className="text-[#ffcc00]">{pendingName}</span> wins
+            <span className="text-primary">{pendingName}</span> wins
           </p>
           <div className="flex items-center gap-2 mb-4">
             <div className="flex-1">
@@ -152,7 +152,7 @@ export default function BracketMatch({
                 onChange={e => setScore1(e.target.value)}
                 placeholder="—"
                 className="w-full bg-white/[0.05] border border-white/[0.06] rounded-lg px-2 py-1.5
-                           text-white text-sm text-center focus:outline-none focus:border-[#ffcc00]/40"
+                           text-white text-sm text-center focus:outline-none focus:border-primary/40"
               />
             </div>
             <span className="text-zinc-500 text-sm mt-4">:</span>
@@ -167,7 +167,7 @@ export default function BracketMatch({
                 onChange={e => setScore2(e.target.value)}
                 placeholder="—"
                 className="w-full bg-white/[0.05] border border-white/[0.06] rounded-lg px-2 py-1.5
-                           text-white text-sm text-center focus:outline-none focus:border-[#ffcc00]/40"
+                           text-white text-sm text-center focus:outline-none focus:border-primary/40"
               />
             </div>
           </div>
@@ -183,7 +183,7 @@ export default function BracketMatch({
             </button>
             <button
               onClick={handleConfirmWinner}
-              className="flex-1 py-1.5 rounded-lg text-xs font-semibold text-black bg-[#ffcc00] hover:bg-[#ffd633] transition-colors"
+              className="flex-1 py-1.5 rounded-lg text-xs font-semibold text-black bg-primary hover:bg-primary-light transition-colors"
             >
               Confirm
             </button>

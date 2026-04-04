@@ -99,7 +99,7 @@ export default function BracketConnectors({ matches, containerRef, bracketFilter
     >
       <defs>
         <filter id="glow">
-          <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#ffcc00" floodOpacity="0.3" />
+          <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="var(--primary)" floodOpacity="0.3" />
         </filter>
       </defs>
       {lines.map((line, i) => {
@@ -110,7 +110,7 @@ export default function BracketConnectors({ matches, containerRef, bracketFilter
             key={i}
             d={path}
             fill="none"
-            stroke={line.isActive ? "#ffcc00" : "rgba(255,255,255,0.18)"}
+            stroke={line.isActive ? "var(--primary)" : "rgba(255,255,255,0.18)"}
             strokeWidth={line.isActive ? 2 : 1.5}
             filter={line.isActive ? "url(#glow)" : undefined}
             className="transition-all duration-500"

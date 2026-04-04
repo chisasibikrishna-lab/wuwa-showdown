@@ -4,6 +4,7 @@ import { TournamentProvider } from "@/context/TournamentContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { HistoryProvider } from "@/context/HistoryContext";
 import { BracketProvider } from "@/context/BracketContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import RouteGuard from "@/components/RouteGuard";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -27,17 +28,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`h-full antialiased dark ${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-full">
-        <AuthProvider>
-          <TournamentProvider>
-            <HistoryProvider>
-              <BracketProvider>
-                <RouteGuard>
-                  <BaseLayout>{children}</BaseLayout>
-                </RouteGuard>
-              </BracketProvider>
-            </HistoryProvider>
-          </TournamentProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <TournamentProvider>
+              <HistoryProvider>
+                <BracketProvider>
+                  <RouteGuard>
+                    <BaseLayout>{children}</BaseLayout>
+                  </RouteGuard>
+                </BracketProvider>
+              </HistoryProvider>
+            </TournamentProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

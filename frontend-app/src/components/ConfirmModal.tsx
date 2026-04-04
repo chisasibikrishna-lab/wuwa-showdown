@@ -47,13 +47,13 @@ export default function ConfirmModal({
 
   const colors = {
     info: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-    warning: "text-[#ffcc00] bg-[#ffcc00]/10 border-[#ffcc00]/20",
+    warning: "text-primary bg-primary/10 border-primary/20",
     danger: "text-red-400 bg-red-500/10 border-red-500/20",
   };
 
   const btnColors = {
     info: "bg-blue-500 hover:bg-blue-600 text-white",
-    warning: "bg-[#ffcc00] hover:bg-[#ffd633] text-black",
+    warning: "bg-primary hover:bg-primary-light text-black",
     danger: "bg-red-500 hover:bg-red-600 text-white",
   };
 

@@ -45,7 +45,7 @@ export default function RoomDetailPage() {
         <TopNavbar />
         <div className="text-center">
           <p className="text-white/40 mb-4">Room not found.</p>
-          <Link href="/history" className="text-[#ffcc00] text-sm">← Back to History</Link>
+          <Link href="/history" className="text-primary text-sm">← Back to History</Link>
         </div>
       </div>
     );
@@ -67,13 +67,13 @@ export default function RoomDetailPage() {
         </Link>
 
         {/* Room Header */}
-        <div className="bg-black/40 border border-[#ffcc00]/15 backdrop-blur-xl rounded-2xl px-7 py-6 mb-8 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b from-[#ffcc00] to-[#ffcc00]/10" />
+        <div className="bg-black/40 border border-primary/15 backdrop-blur-xl rounded-2xl px-7 py-6 mb-8 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b from-primary to-primary/10" />
           <div className="ml-3">
             <p className="text-white/30 text-xs uppercase tracking-wide mb-1">Room Record</p>
             <h1 className="text-3xl font-semibold text-white tracking-tight">{room.name}</h1>
             <div className="flex flex-wrap items-center gap-4 mt-3 text-white/40 text-xs">
-              <span className="font-mono text-[#ffcc00] font-semibold bg-[#ffcc00]/5 border border-[#ffcc00]/15 px-2.5 py-1 rounded-lg tracking-[0.12em]">CODE: {room.code}</span>
+              <span className="font-mono text-primary font-semibold bg-primary/5 border border-primary/15 px-2.5 py-1 rounded-lg tracking-[0.12em]">CODE: {room.code}</span>
               <span className="flex items-center gap-1"><Users size={12} />{room.players.length} players</span>
               <span className="flex items-center gap-1"><Layers size={12} />{challenges.length} challenges</span>
               <span className="flex items-center gap-1"><Calendar size={12} />{new Date(room.createdAt).toLocaleDateString()}</span>

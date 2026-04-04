@@ -30,20 +30,20 @@ export default function PointsLeaderboardTab({ room }: Props) {
       <div className="grid grid-cols-1 gap-2.5">
         {room.players.length === 0 ? (
           <div className="text-center text-white/25 py-20 border border-white/[0.04] border-dashed rounded-2xl font-medium tracking-wide text-sm">
-            No players have joined this room yet. Share the code: <span className="text-[#ffcc00] ml-1">{room.code}</span>
+            No players have joined this room yet. Share the code: <span className="text-primary ml-1">{room.code}</span>
           </div>
         ) : (
           [...room.players].sort((a, b) => b.roomScore - a.roomScore).map((player, idx) => (
             <div key={player.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-[#111318] border border-white/[0.06] rounded-2xl hover:border-white/[0.1] transition-all duration-200 group">
               <div className="flex items-center gap-4">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm ${idx === 0 ? "bg-[#ffcc00] text-black shadow-[0_0_12px_rgba(255,204,0,0.3)]" : idx === 1 ? "bg-slate-300 text-black" : idx === 2 ? "bg-orange-400 text-black" : "bg-white/[0.04] text-white/30 border border-white/[0.08]"}`}>
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm ${idx === 0 ? "bg-primary text-black shadow-primary-xs" : idx === 1 ? "bg-slate-300 text-black" : idx === 2 ? "bg-orange-400 text-black" : "bg-white/[0.04] text-white/30 border border-white/[0.08]"}`}>
                   {idx + 1}
                 </div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={player.avatar} alt="avatar" className="w-10 h-10 rounded-full border border-white/[0.08] bg-black" />
                 <div>
                   <div className="text-white font-semibold tracking-tight text-[15px]">{player.name}</div>
-                  <div className="text-[#ffcc00] font-bold text-lg mt-0.5">{player.roomScore} <span className="text-xs font-medium text-[#ffcc00]/60">PTS</span></div>
+                  <div className="text-primary font-bold text-lg mt-0.5">{player.roomScore} <span className="text-xs font-medium text-primary/60">PTS</span></div>
                 </div>
               </div>
 

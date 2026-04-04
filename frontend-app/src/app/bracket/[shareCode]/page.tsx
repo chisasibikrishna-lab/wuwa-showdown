@@ -13,6 +13,7 @@ import Link from "next/link";
 import { DndContext, DragEndEvent, DragStartEvent, useSensor, useSensors, PointerSensor, DragOverlay } from '@dnd-kit/core';
 import { generateSingleElimination, generateDoubleElimination } from "@/utils/bracketPreview";
 import ParticipantSlot from "@/components/bracket/ParticipantSlot";
+import BracketPointsTable from "@/components/bracket/BracketPointsTable";
 
 export default function BracketViewPage({ params }: { params: Promise<{ shareCode: string }> }) {
   const { shareCode } = use(params);
@@ -251,7 +252,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#ffcc00]/30 border-t-[#ffcc00] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
@@ -260,7 +261,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <h2 className="text-xl font-semibold text-white">Bracket not found</h2>
-        <Link href="/bracket" className="text-[#ffcc00] hover:underline text-sm">
+        <Link href="/bracket" className="text-primary hover:underline text-sm">
           Back to brackets
         </Link>
       </div>
@@ -288,7 +289,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
                   type="text"
                   value={editName}
                   onChange={e => setEditName(e.target.value)}
-                  className="text-2xl font-bold bg-transparent border-b border-[#ffcc00]/40 text-white focus:outline-none"
+                  className="text-2xl font-bold bg-transparent border-b border-primary/40 text-white focus:outline-none"
                 />
                 <button onClick={saveEdit} className="p-1.5 rounded-lg text-emerald-400 hover:bg-emerald-500/10">
                   <Check size={18} />
@@ -315,7 +316,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
                 ${bracket.status === "active"
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                   : bracket.status === "completed"
-                    ? "bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/30"
+                    ? "bg-primary/20 text-primary border border-primary/30"
                     : "bg-zinc-700 text-zinc-300"
                 }
               `}>
@@ -336,7 +337,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
           {/* Actions */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {isOwner && (
-              <div className="flex items-center bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden focus-within:border-[#ffcc00]/40 transition-colors">
+              <div className="flex items-center bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden focus-within:border-primary/40 transition-colors">
                 <input
                   type="text"
                   value={newPlayerName}
@@ -348,7 +349,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
                 <button
                   onClick={handleQuickAddClick}
                   disabled={!newPlayerName.trim() || isAddingPlayer}
-                  className="p-2 text-zinc-400 hover:text-[#ffcc00] hover:bg-white/[0.05] transition-colors disabled:opacity-50"
+                  className="p-2 text-zinc-400 hover:text-primary hover:bg-white/[0.05] transition-colors disabled:opacity-50"
                   title="Add player"
                 >
                   <UserPlus size={16} />
@@ -370,9 +371,9 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
                 <button
                   onClick={handleRegenerate}
                   disabled={bracket.participants.length < 2}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm bg-[#ffcc00] text-black font-semibold
-                           hover:bg-[#ffd633] transition-all disabled:opacity-40 disabled:cursor-not-allowed
-                           shadow-[0_0_20px_rgba(255,204,0,0.2)]"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm bg-primary text-black font-semibold
+                           hover:bg-primary-light transition-all disabled:opacity-40 disabled:cursor-not-allowed
+                           shadow-primary-md"
                 >
                   <Swords size={14} /> Generate
                 </button>
@@ -385,15 +386,15 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
 
         {/* Champion Banner */}
         {bracket.champion && (
-          <div className="mb-6 bg-gradient-to-r from-[#ffcc00]/10 via-[#ffcc00]/5 to-transparent
-                          border border-[#ffcc00]/20 rounded-2xl px-6 py-4 flex items-center gap-4
-                          shadow-[0_0_40px_rgba(255,204,0,0.08)]">
-            <div className="w-10 h-10 rounded-xl bg-[#ffcc00]/20 flex items-center justify-center">
-              <Trophy size={20} className="text-[#ffcc00]" />
+          <div className="mb-6 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent
+                          border border-primary/20 rounded-2xl px-6 py-4 flex items-center gap-4
+                          shadow-primary-xl">
+            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+              <Trophy size={20} className="text-primary" />
             </div>
             <div>
-              <div className="text-xs text-[#ffcc00]/60 uppercase tracking-widest font-semibold">Champion</div>
-              <div className="text-xl font-bold text-[#ffcc00]">{bracket.champion}</div>
+              <div className="text-xs text-primary/60 uppercase tracking-widest font-semibold">Champion</div>
+              <div className="text-xl font-bold text-primary">{bracket.champion}</div>
             </div>
           </div>
         )}
@@ -402,7 +403,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
         <div className="mb-6 bg-[#0a0a0c]/40 backdrop-blur-xl border border-white/[0.05] rounded-2xl p-5 shadow-lg">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-white font-semibold flex items-center gap-2">
-              <Users size={16} className="text-[#ffcc00]" />
+              <Users size={16} className="text-primary" />
               Roster ({bracket.participants.length})
             </h3>
           </div>
@@ -439,7 +440,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
         </div>
 
         {/* Bracket Visualization */}
-        <div className="bg-[#0a0a0c]/40 backdrop-blur border border-white/[0.05] rounded-2xl p-4 sm:p-6 mb-24">
+        <div className="bg-[#0a0a0c]/40 backdrop-blur border border-white/[0.05] rounded-2xl p-4 sm:p-6 mb-6">
           {previewBracket && (
             <BracketVisualization
               bracket={previewBracket}
@@ -449,6 +450,17 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
             />
           )}
         </div>
+
+        {/* Points Table */}
+        {bracket.status !== "draft" && bracket.matches.length > 0 && (
+          <div className="mb-24">
+            <BracketPointsTable
+              matches={bracket.matches}
+              participants={bracket.participants}
+              bracketType={bracket.type}
+            />
+          </div>
+        )}
       </div>
 
       {/* Floating Action Toolbar */}
@@ -485,7 +497,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
           <button
             onClick={confirmReset}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all
-                       text-[#ffcc00] hover:bg-[#ffcc00]/10"
+                       text-primary hover:bg-primary/10"
             title="Edit Bracket Matchups"
           >
             <Pencil size={16} /> Edit
@@ -524,7 +536,7 @@ export default function BracketViewPage({ params }: { params: Promise<{ shareCod
       />
       <DragOverlay dropAnimation={{ duration: 250, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)' }}>
         {activeDragSeed && bracket ? (
-          <div className="w-52 bg-[#0a0a0c]/90 border border-[#ffcc00]/50 rounded-xl shadow-[0_0_20px_rgba(255,204,0,0.3)] overflow-hidden scale-105 pointer-events-none origin-top-left">
+          <div className="w-52 bg-[#0a0a0c]/90 border border-primary/50 rounded-xl shadow-primary-md overflow-hidden scale-105 pointer-events-none origin-top-left">
              <ParticipantSlot
                 participant={bracket.participants.find((p: any) => p.seed === activeDragSeed) || null}
                 seed={activeDragSeed}

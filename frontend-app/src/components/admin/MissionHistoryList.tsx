@@ -32,7 +32,7 @@ export default function MissionHistoryList({ roomId, challenges, onViewResults }
               </div>
             </div>
             <div className="flex items-center w-full sm:w-auto justify-end gap-3 border-t sm:border-t-0 border-white/[0.04] pt-3 sm:pt-0">
-              <div className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide flex items-center justify-center capitalize border ${c.status === 'pending' ? 'bg-white/[0.03] text-white/40 border-white/[0.06]' : c.status === 'completed' ? 'bg-emerald-500/8 text-emerald-400 border-emerald-500/15' : 'bg-[#ffcc00]/8 text-[#ffcc00] border-[#ffcc00]/15'}`}>
+              <div className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide flex items-center justify-center capitalize border ${c.status === 'pending' ? 'bg-white/[0.03] text-white/40 border-white/[0.06]' : c.status === 'completed' ? 'bg-emerald-500/8 text-emerald-400 border-emerald-500/15' : 'bg-primary/8 text-primary border-primary/15'}`}>
                 {c.status}
               </div>
               {c.status === 'pending' && (

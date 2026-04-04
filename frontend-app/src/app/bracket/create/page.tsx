@@ -87,7 +87,7 @@ export default function CreateBracketPage() {
             onChange={e => setName(e.target.value)}
             placeholder="Spring Championship 2026"
             className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-white/[0.08] text-white
-                       placeholder-zinc-600 focus:outline-none focus:border-[#ffcc00]/40 focus:ring-1 focus:ring-[#ffcc00]/20
+                       placeholder-zinc-600 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20
                        transition-all text-sm"
           />
         </div>
@@ -100,7 +100,7 @@ export default function CreateBracketPage() {
               onClick={() => setType("single")}
               className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all text-left
                 ${type === "single"
-                  ? "bg-[#ffcc00]/10 border-[#ffcc00]/40 text-[#ffcc00]"
+                  ? "bg-primary/10 border-primary/40 text-primary"
                   : "bg-white/[0.03] border-white/[0.06] text-zinc-400 hover:border-white/[0.12]"
                 }`}
             >
@@ -114,7 +114,7 @@ export default function CreateBracketPage() {
               onClick={() => setType("double")}
               className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all text-left
                 ${type === "double"
-                  ? "bg-[#ffcc00]/10 border-[#ffcc00]/40 text-[#ffcc00]"
+                  ? "bg-primary/10 border-primary/40 text-primary"
                   : "bg-white/[0.03] border-white/[0.06] text-zinc-400 hover:border-white/[0.12]"
                 }`}
             >
@@ -144,7 +144,7 @@ export default function CreateBracketPage() {
             rows={10}
             placeholder={"Player1\nPlayer2\nPlayer3\nPlayer4\nPlayer5\nPlayer6\nPlayer7\nPlayer8"}
             className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-white/[0.08] text-white
-                       placeholder-zinc-700 focus:outline-none focus:border-[#ffcc00]/40 focus:ring-1 focus:ring-[#ffcc00]/20
+                       placeholder-zinc-700 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20
                        transition-all text-sm font-mono resize-y leading-relaxed"
           />
           {participantCount > 0 && participantCount < 2 && (
@@ -167,7 +167,7 @@ export default function CreateBracketPage() {
           <button
             onClick={() => setRandomize(!randomize)}
             className={`relative w-11 h-6 rounded-full transition-colors duration-200
-              ${randomize ? "bg-[#ffcc00]" : "bg-zinc-700"}`}
+              ${randomize ? "bg-primary" : "bg-zinc-700"}`}
           >
             <div
               className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200
@@ -202,8 +202,8 @@ export default function CreateBracketPage() {
           <button
             onClick={() => handleSubmit(false)}
             disabled={!isValid || loading}
-            className="flex-1 px-6 py-3 rounded-xl bg-[#ffcc00] text-black font-semibold text-sm
-                       hover:bg-[#ffd633] transition-all shadow-[0_0_20px_rgba(255,204,0,0.2)]
+            className="flex-1 px-6 py-3 rounded-xl bg-primary text-black font-semibold text-sm
+                       hover:bg-primary-light transition-all shadow-primary-md
                        disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
           >
             {loading ? "Creating..." : "Generate Bracket"}

@@ -21,8 +21,8 @@ export default function ChallengeHistoryCard({ challenge, index }: Props) {
         className="w-full flex items-center justify-between px-5 py-4 text-left"
       >
         <div className="flex items-center gap-4">
-          <div className="w-9 h-9 rounded-full bg-[#ffcc00]/10 border border-[#ffcc00]/20 flex items-center justify-center">
-            <span className="text-[#ffcc00] font-bold text-sm">#{index + 1}</span>
+          <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <span className="text-primary font-bold text-sm">#{index + 1}</span>
           </div>
           <div>
             <div className="text-white font-semibold text-sm tracking-tight">
@@ -38,11 +38,11 @@ export default function ChallengeHistoryCard({ challenge, index }: Props) {
         <div className="flex items-center gap-4">
           {winner && (
             <div className="hidden sm:flex items-center gap-2">
-              <Trophy size={13} className="text-[#ffcc00]/60" />
+              <Trophy size={13} className="text-primary/60" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={winner.playerAvatar} alt="" className="w-5 h-5 rounded-full" />
               <span className="text-white/60 text-xs font-medium">{winner.playerName}</span>
-              <span className="text-[#ffcc00] font-bold text-xs">+{winner.points}</span>
+              <span className="text-primary font-bold text-xs">+{winner.points}</span>
             </div>
           )}
           <div className="text-white/30">
@@ -58,7 +58,7 @@ export default function ChallengeHistoryCard({ challenge, index }: Props) {
             {sortedResults.map((r, i) => (
               <div key={r.playerId} className="flex items-center justify-between py-2.5 px-4 bg-white/[0.02] rounded-xl border border-white/[0.04]">
                 <div className="flex items-center gap-3">
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? "bg-[#ffcc00] text-black" : i === 1 ? "bg-slate-300 text-black" : i === 2 ? "bg-orange-400 text-black" : "bg-white/5 text-white/30"}`}>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i === 0 ? "bg-primary text-black" : i === 1 ? "bg-slate-300 text-black" : i === 2 ? "bg-orange-400 text-black" : "bg-white/5 text-white/30"}`}>
                     {i + 1}
                   </span>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -68,7 +68,7 @@ export default function ChallengeHistoryCard({ challenge, index }: Props) {
                 <div className="flex items-center gap-4 text-xs text-white/40">
                   <span className="hidden sm:block">Drift <span className="text-white/60">{Math.round(r.distance)}u</span></span>
                   <span className="hidden sm:block">Time <span className="text-white/60">{r.timeTaken}s</span></span>
-                  <span className="text-[#ffcc00] font-bold text-base">+{r.points}</span>
+                  <span className="text-primary font-bold text-base">+{r.points}</span>
                 </div>
               </div>
             ))}

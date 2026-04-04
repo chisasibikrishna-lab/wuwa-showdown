@@ -37,8 +37,8 @@ export default function HistoryPage() {
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-16">
         <div className="flex items-center gap-3.5 mb-10">
-          <div className="w-11 h-11 rounded-xl bg-[#ffcc00]/10 border border-[#ffcc00]/20 flex items-center justify-center">
-            <History size={22} className="text-[#ffcc00]" />
+          <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <History size={22} className="text-primary" />
           </div>
           <div>
             <h1 className="text-2xl text-white font-semibold tracking-tight">Match History</h1>

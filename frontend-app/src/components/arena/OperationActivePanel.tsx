@@ -22,8 +22,8 @@ export default function OperationActivePanel({
 }: Props) {
   if (myResult || activeChallenge.status === "completed") {
     return (
-      <div className="bg-black/40 border border-[#ffcc00]/20 rounded-3xl p-8 shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl flex flex-col items-center justify-center text-center h-full overflow-hidden min-h-[500px] relative">
-        <CheckCircle2 size={52} className="text-[#ffcc00]/80 mb-5" />
+      <div className="bg-black/40 border border-primary/20 rounded-3xl p-8 shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl flex flex-col items-center justify-center text-center h-full overflow-hidden min-h-[500px] relative">
+        <CheckCircle2 size={52} className="text-primary/80 mb-5" />
         <h2 className="text-2xl lg:text-3xl text-white font-semibold tracking-tight mb-4">Submission Locked</h2>
 
         {myResult ? (
@@ -38,7 +38,7 @@ export default function OperationActivePanel({
             </div>
             <div className="flex justify-between items-center px-5 py-5">
               <span className="text-white/40 text-sm">Reward</span>
-              <span className="text-[#ffcc00] text-3xl font-bold">+{myResult.points}</span>
+              <span className="text-primary text-3xl font-bold">+{myResult.points}</span>
             </div>
           </div>
         ) : (
@@ -62,7 +62,7 @@ export default function OperationActivePanel({
         <h3 className="text-white font-semibold text-sm tracking-wide flex items-center gap-2 uppercase">
           <MonitorPlay size={16} className="text-red-400" /> Operation Active
         </h3>
-        <div className={`font-mono font-semibold text-lg px-3 py-1.5 bg-black/40 border rounded-lg flex items-center gap-2 ${timeLeft <= 10 ? 'text-red-400 border-red-500/30 animate-pulse' : 'text-[#ffcc00] border-[#ffcc00]/20'}`}>
+        <div className={`font-mono font-semibold text-lg px-3 py-1.5 bg-black/40 border rounded-lg flex items-center gap-2 ${timeLeft <= 10 ? 'text-red-400 border-red-500/30 animate-pulse' : 'text-primary border-primary/20'}`}>
           <Timer size={16} /> 00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
         </div>
       </div>
@@ -78,7 +78,7 @@ export default function OperationActivePanel({
 
       <div className="bg-black/20 border border-white/[0.04] rounded-xl p-4 mt-2">
         <p className="text-white/60 text-sm leading-relaxed mb-3">
-          Study the information and mark the correct spot on the map. You can earn up to <span className="text-[#ffcc00] font-semibold">20 points</span>.
+          Study the information and mark the correct spot on the map. You can earn up to <span className="text-primary font-semibold">20 points</span>.
         </p>
 
         <ul className="text-white/40 text-xs flex flex-col gap-2 list-disc pl-4 marker:text-white/20">

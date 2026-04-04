@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className={`flex-1 flex flex-col items-center justify-center w-full max-w-[1100px] animate-in fade-in zoom-in duration-700 ${rajdhani.className}`}>
       {/* Decorative center glowing orb */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30vw] h-[30vw] min-w-[300px] min-h-[300px] bg-[#ffcc00]/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30vw] h-[30vw] min-w-[300px] min-h-[300px] bg-primary/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
 
       {/* Main Content Area */}
       <div className="relative z-10 flex flex-col items-center gap-12 mt-12">
@@ -24,10 +24,10 @@ export default function Home() {
             Welcome to the Arena
           </h2>
           <h1
-            className="text-white text-[70px] xl:text-[100px] italic uppercase leading-none drop-shadow-[0_0_25px_rgba(255,204,0,0.3)] px-8 overflow-visible font-bold tracking-[0.05em]"
+            className="text-white text-[70px] xl:text-[100px] italic uppercase leading-none drop-shadow-primary-lg px-8 overflow-visible font-bold tracking-[0.05em]"
           >
             Ultimate{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#ffcc00] to-[#b38f00]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-primary to-[#b38f00]">
               Showdown
             </span>
           </h1>
@@ -36,18 +36,18 @@ export default function Home() {
         {/* Play Now Button */}
         <div className="relative group cursor-pointer mt-8">
           {/* Animated rings */}
-          <div className="absolute -inset-4 rounded-full border border-[#ffcc00]/20 scale-90 group-hover:scale-110 opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out" />
-          <div className="absolute -inset-8 rounded-full border border-[#ffcc00]/10 scale-90 group-hover:scale-125 opacity-0 group-hover:opacity-100 transition-all duration-1000 ease-out delay-75" />
+          <div className="absolute -inset-4 rounded-full border border-primary/20 scale-90 group-hover:scale-110 opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out" />
+          <div className="absolute -inset-8 rounded-full border border-primary/10 scale-90 group-hover:scale-125 opacity-0 group-hover:opacity-100 transition-all duration-1000 ease-out delay-75" />
 
           <Link href="/arena">
-            <button className="relative px-16 py-6 overflow-hidden rounded-full bg-[#161922] border-[2px] border-[#ffcc00]/30 hover:border-[#ffcc00] transition-colors duration-300">
+            <button className="relative px-16 py-6 overflow-hidden rounded-full bg-[#161922] border-[2px] border-primary/30 hover:border-primary transition-colors duration-300">
               {/* Button inner glow and hover state */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#ffcc00]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#ffcc00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ffcc00] opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_20px_rgba(255,204,0,0.8)]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-primary-md" />
 
               <span
-                className="relative z-10 text-[28px] uppercase text-white group-hover:text-[#ffcc00] transition-colors duration-300 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] tracking-[0.1em] font-bold"
+                className="relative z-10 text-[28px] uppercase text-white group-hover:text-primary transition-colors duration-300 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] tracking-[0.1em] font-bold"
               >
                 Play Now
               </span>

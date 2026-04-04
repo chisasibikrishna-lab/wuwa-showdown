@@ -11,14 +11,14 @@ interface Props {
 
 export default function MissionPrecheck({ myPlayer, onReady }: Props) {
   return (
-    <div className="w-full max-w-5xl mx-auto px-6 py-14 border border-[#ffcc00]/20 bg-black/40 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl relative overflow-hidden">
+    <div className="w-full max-w-5xl mx-auto px-6 py-14 border border-primary/20 bg-black/40 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl relative overflow-hidden">
 
       {/* top glow line */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffcc00] to-transparent opacity-60" />
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-60" />
 
       {/* Header */}
       <div className="flex flex-col items-center text-center mb-10">
-        <Lock size={52} className="text-[#ffcc00]/70 mb-4" />
+        <Lock size={52} className="text-primary/70 mb-4" />
         <h2 className="text-3xl text-white font-semibold mb-2">Mission Pre-check</h2>
         <p className="text-white/50 text-sm max-w-lg leading-relaxed">
           Intelligence packets have been dispatched. Confirm your readiness to launch.
@@ -44,8 +44,8 @@ export default function MissionPrecheck({ myPlayer, onReady }: Props) {
           disabled={myPlayer.isReady}
           className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium text-sm transition-all duration-200 whitespace-nowrap ${
             myPlayer.isReady
-              ? "bg-[#ffcc00]/10 text-[#ffcc00] border border-[#ffcc00]/20"
-              : "bg-[#ffcc00] hover:bg-[#ffe066] text-black"
+              ? "bg-primary/10 text-primary border border-primary/20"
+              : "bg-primary hover:bg-primary-light text-black"
           }`}
         >
           {myPlayer.isReady ? (

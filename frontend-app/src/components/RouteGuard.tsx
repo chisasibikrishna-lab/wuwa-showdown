@@ -29,7 +29,7 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
   if (isLoading || !authorized) {
     return (
       <div className="min-h-screen bg-[#0a0a0c] flex items-center justify-center">
-        <div className="text-[#ffcc00] p-20 text-center font-bold uppercase tracking-widest font-mono animate-pulse">Loading...</div>
+        <div className="text-primary p-20 text-center font-bold uppercase tracking-widest font-mono animate-pulse">Loading...</div>
       </div>
     );
   }

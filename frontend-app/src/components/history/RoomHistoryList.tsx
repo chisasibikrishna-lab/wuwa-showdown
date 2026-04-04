@@ -35,7 +35,7 @@ export default function RoomHistoryList({ rooms, onDeleteClick, isAdmin }: Props
       {rooms.map((room) => (
         <div
           key={room._id}
-          className="group bg-black/40 border border-white/[0.08] hover:border-[#ffcc00]/30 rounded-2xl p-5 backdrop-blur-xl shadow-lg transition-all duration-200 flex flex-col justify-between gap-4"
+          className="group bg-black/40 border border-white/[0.08] hover:border-primary/30 rounded-2xl p-5 backdrop-blur-xl shadow-lg transition-all duration-200 flex flex-col justify-between gap-4"
         >
           <div>
             <div className="flex items-start justify-between mb-3">
@@ -43,7 +43,7 @@ export default function RoomHistoryList({ rooms, onDeleteClick, isAdmin }: Props
                 <h3 className="text-white font-semibold text-lg tracking-tight truncate">{room.name}</h3>
                 <span className="text-white/30 font-mono text-xs tracking-[0.12em]">CODE: {room.code}</span>
               </div>
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${room.closedAt ? "bg-white/5 text-white/30 border-white/10" : "bg-[#ffcc00]/10 text-[#ffcc00] border-[#ffcc00]/20"}`}>
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${room.closedAt ? "bg-white/5 text-white/30 border-white/10" : "bg-primary/10 text-primary border-primary/20"}`}>
                 {room.closedAt ? "CLOSED" : "ACTIVE"}
               </span>
             </div>
@@ -58,7 +58,7 @@ export default function RoomHistoryList({ rooms, onDeleteClick, isAdmin }: Props
           <div className="flex gap-2">
             <Link
               href={`/history/${room._id}`}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-white/[0.04] hover:bg-[#ffcc00]/10 border border-white/[0.08] hover:border-[#ffcc00]/20 text-white/60 hover:text-[#ffcc00] rounded-xl text-xs font-semibold tracking-wide transition-all duration-200"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-white/[0.04] hover:bg-primary/10 border border-white/[0.08] hover:border-primary/20 text-white/60 hover:text-primary rounded-xl text-xs font-semibold tracking-wide transition-all duration-200"
             >
               View Details <ChevronRight size={13} />
             </Link>

@@ -231,7 +231,7 @@ export default function InteractiveMap({ onLocationSelect, selectedLocation, cor
         const iconHtml = `
           <div class="flex flex-col items-center justify-center -translate-y-3">
             <div class="game-marker" style="background-color: #ffcc00; width: 20px; height: 20px; border: 2px solid white; box-shadow: 0 0 15px #ffcc00;"></div>
-            <span class="text-[10px] font-bold uppercase tracking-widest text-[#ffcc00] mt-1 bg-black/80 px-1 border border-[#ffcc00]/30 rounded whitespace-nowrap">Your Mark</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-primary mt-1 bg-black/80 px-1 border border-primary/30 rounded whitespace-nowrap">Your Mark</span>
           </div>
         `;
         const customIcon = L.divIcon({

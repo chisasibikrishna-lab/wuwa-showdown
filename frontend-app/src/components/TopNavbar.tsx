@@ -30,27 +30,27 @@ const NavItem: React.FC<NavItemProps> = ({ label, href, isActive }) => {
 
         {/* Active State Gradient Background */}
         <div
-          className={`absolute inset-0 transition-opacity duration-300 bg-gradient-to-t from-[#ffcc00]/25 via-[#ffcc00]/5 to-transparent ${isActive ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 transition-opacity duration-300 bg-gradient-to-t from-primary/25 via-primary/5 to-transparent ${isActive ? "opacity-100" : "opacity-0"}`}
         />
 
         {/* Active Side Slanted Lines */}
         <div
-          className={`absolute inset-y-0 left-0 w-[1px] transition-opacity duration-300 bg-gradient-to-t from-[#ffcc00] via-[#ffcc00]/40 to-transparent ${isActive ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-y-0 left-0 w-[1px] transition-opacity duration-300 bg-gradient-to-t from-primary via-primary/40 to-transparent ${isActive ? "opacity-100" : "opacity-0"}`}
         />
         <div
-          className={`absolute inset-y-0 right-0 w-[1px] transition-opacity duration-300 bg-gradient-to-t from-[#ffcc00] via-[#ffcc00]/40 to-transparent ${isActive ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-y-0 right-0 w-[1px] transition-opacity duration-300 bg-gradient-to-t from-primary via-primary/40 to-transparent ${isActive ? "opacity-100" : "opacity-0"}`}
         />
 
         {/* Active Bottom Glowing Line */}
         <div
-          className={`absolute bottom-0 left-0 right-0 h-[3px] transition-opacity duration-300 bg-[#ffcc00] shadow-[0_0_15px_rgba(255,204,0,0.8)] ${isActive ? "opacity-100" : "opacity-0"}`}
+          className={`absolute bottom-0 left-0 right-0 h-[3px] transition-opacity duration-300 bg-primary shadow-primary-glow ${isActive ? "opacity-100" : "opacity-0"}`}
         />
       </div>
 
       {/* Nav Item Text */}
       <span
         className={`relative z-10 text-[15px] uppercase font-bold tracking-[0.12em] transition-colors duration-300 ${
-          isActive ? "text-[#ffcc00] drop-shadow-[0_0_8px_rgba(255,204,0,0.6)]" : "text-[#8b92a5] group-hover:text-white"
+          isActive ? "text-primary drop-shadow-primary-sm" : "text-[#8b92a5] group-hover:text-white"
         }`}
       >
         {label}
@@ -109,7 +109,7 @@ export default function TopNavbar() {
                {user ? (
                  <ProfileDropdown />
                ) : (
-                 <Link href="/login" className="text-[#ffcc00] border border-[#ffcc00]/50 hover:bg-[#ffcc00]/10 px-3 py-1 rounded transition-all flex items-center gap-2 text-[12px] uppercase font-semibold tracking-wide">
+                 <Link href="/login" className="text-primary border border-primary/50 hover:bg-primary/10 px-3 py-1 rounded transition-all flex items-center gap-2 text-[12px] uppercase font-semibold tracking-wide">
                     <UserIcon size={14} /> Login
                  </Link>
                )}

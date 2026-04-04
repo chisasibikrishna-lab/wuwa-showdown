@@ -12,7 +12,7 @@ function StatusBadge({ status }: { status: BracketData["status"] }) {
   const colors = {
     draft: "bg-zinc-700 text-zinc-300",
     active: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30",
-    completed: "bg-[#ffcc00]/20 text-[#ffcc00] border border-[#ffcc00]/30",
+    completed: "bg-primary/20 text-primary border border-primary/30",
   };
   return (
     <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wider ${colors[status]}`}>
@@ -42,7 +42,7 @@ function BracketCard({ bracket, onDelete }: { bracket: BracketData; onDelete: (i
       onClick={() => router.push(`/bracket/${bracket.shareCode}`)}
       className="group relative bg-[#0a0a0c]/60 backdrop-blur-xl border border-white/[0.06] rounded-2xl cursor-pointer overflow-hidden
                  hover:bg-[#0a0a0c]/90 hover:border-white/[0.15] transition-all duration-300
-                 hover:shadow-[0_0_40px_rgba(255,204,0,0.04)] flex flex-col"
+                 hover:shadow-primary-xl flex flex-col"
     >
       {/* Visual Image Banner */}
       <div className="relative h-24 w-full bg-[#111113] border-b border-white/[0.06] overflow-hidden shrink-0">
@@ -60,7 +60,7 @@ function BracketCard({ bracket, onDelete }: { bracket: BracketData; onDelete: (i
       <div className="p-5 flex-1 flex flex-col">
         {/* Header */}
         <div className="mb-4">
-          <h3 className="text-white font-semibold text-lg line-clamp-2 leading-tight group-hover:text-[#ffcc00] transition-colors" title={bracket.name}>
+          <h3 className="text-white font-semibold text-lg line-clamp-2 leading-tight group-hover:text-primary transition-colors" title={bracket.name}>
             {bracket.name}
           </h3>
           <p className="text-zinc-500 text-sm mt-1.5">by {bracket.creatorName} &middot; {date}</p>
@@ -77,9 +77,9 @@ function BracketCard({ bracket, onDelete }: { bracket: BracketData; onDelete: (i
 
       {/* Champion */}
       {bracket.champion && (
-        <div className="flex items-center gap-2 bg-[#ffcc00]/10 rounded-xl px-3 py-2 mb-4">
-          <Trophy size={14} className="text-[#ffcc00]" />
-          <span className="text-[#ffcc00] text-sm font-medium">{bracket.champion}</span>
+        <div className="flex items-center gap-2 bg-primary/10 rounded-xl px-3 py-2 mb-4">
+          <Trophy size={14} className="text-primary" />
+          <span className="text-primary text-sm font-medium">{bracket.champion}</span>
         </div>
       )}
 
@@ -152,9 +152,9 @@ export default function BracketListPage() {
         {user && (
           <Link
             href="/bracket/create"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#ffcc00] text-black font-semibold text-sm
-                       hover:bg-[#ffd633] transition-all shadow-[0_0_20px_rgba(255,204,0,0.2)]
-                       hover:shadow-[0_0_30px_rgba(255,204,0,0.3)]"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-black font-semibold text-sm
+                       hover:bg-primary-light transition-all shadow-primary-md
+                       hover:shadow-primary-lg"
           >
             <Plus size={16} strokeWidth={2.5} />
             New Bracket
@@ -165,7 +165,7 @@ export default function BracketListPage() {
       {/* Loading */}
       {loadingBrackets && (
         <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-2 border-[#ffcc00]/30 border-t-[#ffcc00] rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
         </div>
       )}
 
@@ -182,8 +182,8 @@ export default function BracketListPage() {
           {user && (
             <Link
               href="/bracket/create"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#ffcc00] text-black font-semibold text-sm
-                         hover:bg-[#ffd633] transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-black font-semibold text-sm
+                         hover:bg-primary-light transition-all"
             >
               <Plus size={16} strokeWidth={2.5} />
               Create Bracket

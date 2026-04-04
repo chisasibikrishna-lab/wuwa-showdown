@@ -18,7 +18,7 @@ const PodiumAvatar: React.FC<PodiumAvatarProps> = ({ player, rank, color, delay 
         <div className={`relative p-[3px] rounded-full bg-gradient-to-b ${color} shadow-[0_0_20px_rgba(255,255,255,0.1)] group`}>
           {/* Crown for Rank 1 */}
           {rank === 1 && (
-            <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-[#ffcc00] drop-shadow-[0_0_15px_rgba(255,204,0,0.8)] z-20">
+            <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-primary drop-shadow-primary-sm z-20">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.5523 18.5523 20 18 20H6C5.44772 20 5 19.5523 5 19V18H19V19Z" />
               </svg>
@@ -63,7 +63,7 @@ export default function LeaderboardPage() {
             className="text-[40px] md:text-[50px] italic uppercase text-center leading-none text-white drop-shadow-[0_4px_15px_rgba(0,0,0,0.5)] mb-2 md:mb-4 animate-in fade-in zoom-in duration-700 font-bold"
           >
             Tournament{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#ffcc00] to-[#b38f00]">Leaderboard</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-primary to-[#b38f00]">Leaderboard</span>
           </h1>
 
           {/* Podium Section */}
@@ -81,7 +81,7 @@ export default function LeaderboardPage() {
 
             {/* Rank 1 */}
             <div className="absolute left-[50%] bottom-[22%] md:bottom-[53.2%] -translate-x-1/2 w-[150px] flex justify-center">
-              <PodiumAvatar player={top1} rank={1} color="from-[#ffcc00] to-[#d4af37]" delay="delay-0" />
+              <PodiumAvatar player={top1} rank={1} color="from-primary to-[#d4af37]" delay="delay-0" />
             </div>
 
             {/* Rank 3 */}
@@ -119,7 +119,7 @@ export default function LeaderboardPage() {
                     {player.name}
                   </span>
                 </div>
-                <span className="font-bold text-[#ffcc00] text-lg">
+                <span className="font-bold text-primary text-lg">
                   {player.score} PTS
                 </span>
               </div>

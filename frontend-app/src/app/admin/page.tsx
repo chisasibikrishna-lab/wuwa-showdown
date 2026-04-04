@@ -38,8 +38,8 @@ export default function AdminPage() {
       <div className="w-full max-w-[960px] mt-12 mx-auto px-4 sm:px-6 py-10">
         {/* Page Header */}
         <div className="flex items-center gap-3.5 mb-10">
-          <div className="w-11 h-11 rounded-xl bg-[#ffcc00]/10 border border-[#ffcc00]/20 flex items-center justify-center">
-            <Settings size={22} className="text-[#ffcc00]" />
+          <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Settings size={22} className="text-primary" />
           </div>
           <div>
             <h1 className="text-2xl text-white font-semibold tracking-tight">Tournament Admin Panel</h1>
@@ -50,15 +50,15 @@ export default function AdminPage() {
         {/* Create Room Card */}
         <div className="bg-[#111318] border border-white/[0.06] rounded-2xl p-6 sm:p-8 shadow-xl shadow-black/20 mb-10">
           <h2 className="text-white font-semibold text-sm tracking-wide uppercase flex items-center gap-2.5 mb-5">
-            <Users size={16} className="text-[#ffcc00]" /> Create New Room
+            <Users size={16} className="text-primary" /> Create New Room
           </h2>
           <form onSubmit={handleCreateRoom} className="flex flex-col sm:flex-row gap-3">
             <input
               type="text" placeholder="Enter Room Name..." value={newRoomName}
               onChange={(e) => setNewRoomName(e.target.value)}
-              className="flex-1 bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white text-sm outline-none focus:border-[#ffcc00]/30 focus:bg-white/[0.05] transition-all duration-200 placeholder:text-white/20"
+              className="flex-1 bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white text-sm outline-none focus:border-primary/30 focus:bg-white/[0.05] transition-all duration-200 placeholder:text-white/20"
             />
-            <button type="submit" className="bg-[#ffcc00] hover:bg-[#ffe066] text-black px-8 py-3.5 rounded-xl font-semibold tracking-wide text-sm transition-all duration-200 whitespace-nowrap shadow-[0_0_20px_rgba(255,204,0,0.1)]">
+            <button type="submit" className="bg-primary hover:bg-primary-light text-black px-8 py-3.5 rounded-xl font-semibold tracking-wide text-sm transition-all duration-200 whitespace-nowrap shadow-primary-md">
               Create Room
             </button>
           </form>
@@ -74,14 +74,14 @@ export default function AdminPage() {
               <div>
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-white font-semibold text-xl tracking-tight truncate pr-4">{room.name}</h3>
-                  <button onClick={() => finalizeRoom(room.id)} className="bg-white/[0.04] hover:bg-[#ffcc00] border border-white/[0.08] hover:border-[#ffcc00] px-3 py-1.5 rounded-lg text-white/50 hover:text-black font-semibold tracking-wide text-[10px] sm:text-xs transition-all duration-200 shrink-0 uppercase" title="End and Save Room">Finalize Room</button>
+                  <button onClick={() => finalizeRoom(room.id)} className="bg-white/[0.04] hover:bg-primary border border-white/[0.08] hover:border-primary px-3 py-1.5 rounded-lg text-white/50 hover:text-black font-semibold tracking-wide text-[10px] sm:text-xs transition-all duration-200 shrink-0 uppercase" title="End and Save Room">Finalize Room</button>
                 </div>
                 <div className="text-white/30 text-xs mb-0.5">Created by: <span className="text-white/50">{room.creator}</span></div>
                 <div className="text-white/30 text-xs">{new Date(room.createdAt).toLocaleString()}</div>
               </div>
               <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/[0.04]">
-                <div className="bg-white/[0.03] px-3 py-1.5 rounded-lg border border-[#ffcc00]/15 font-mono text-[#ffcc00] font-semibold text-xs tracking-[0.15em]">CODE: {room.code}</div>
-                <button onClick={() => setSelectedRoomId(room.id)} className="bg-white/[0.04] hover:bg-[#ffcc00] border border-white/[0.08] hover:border-[#ffcc00] px-6 py-2 rounded-xl text-white hover:text-black font-semibold tracking-wide text-xs transition-all duration-200 flex items-center gap-2">
+                <div className="bg-white/[0.03] px-3 py-1.5 rounded-lg border border-primary/15 font-mono text-primary font-semibold text-xs tracking-[0.15em]">CODE: {room.code}</div>
+                <button onClick={() => setSelectedRoomId(room.id)} className="bg-white/[0.04] hover:bg-primary border border-white/[0.08] hover:border-primary px-6 py-2 rounded-xl text-white hover:text-black font-semibold tracking-wide text-xs transition-all duration-200 flex items-center gap-2">
                   GO <ArrowRight size={14} />
                 </button>
               </div>
@@ -159,12 +159,12 @@ function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }
 
       {/* Room Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 bg-[#111318] border border-white/[0.06] p-7 rounded-2xl relative overflow-hidden shadow-xl shadow-black/20">
-        <div className="absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b from-[#ffcc00] to-[#ffcc00]/20" />
+        <div className="absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b from-primary to-primary/20" />
         <div className="ml-3">
           <span className="text-white/30 text-xs font-medium tracking-wide uppercase">Room Control Panel</span>
           <h1 className="text-3xl sm:text-4xl text-white font-semibold tracking-tight mt-1">{room.name}</h1>
           <div className="flex items-center gap-3 mt-3 flex-wrap">
-            <div className="bg-white/[0.03] px-3.5 py-1.5 rounded-lg border border-[#ffcc00]/20 font-mono text-[#ffcc00] font-semibold text-xs tracking-[0.15em]">CODE: {room.code}</div>
+            <div className="bg-white/[0.03] px-3.5 py-1.5 rounded-lg border border-primary/20 font-mono text-primary font-semibold text-xs tracking-[0.15em]">CODE: {room.code}</div>
             <div className="text-white/35 text-xs bg-white/[0.03] px-3 py-1.5 rounded-lg border border-white/[0.06] flex items-center gap-2">
               <Users size={13} /> {room.players.length} Players Connected
             </div>
@@ -173,7 +173,7 @@ function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }
         
         <button 
           onClick={() => { finalizeRoom(room.id); onBack(); }}
-          className="mt-4 md:mt-0 flex items-center gap-2 bg-[#ffcc00]/10 hover:bg-[#ffcc00] border border-[#ffcc00]/30 hover:border-[#ffcc00] px-5 py-2.5 rounded-xl text-[#ffcc00] hover:text-black font-semibold tracking-wide text-xs transition-all duration-300 uppercase shadow-[0_0_15px_rgba(255,204,0,0.1)] hover:shadow-[0_0_20px_rgba(255,204,0,0.4)] shrink-0"
+          className="mt-4 md:mt-0 flex items-center gap-2 bg-primary/10 hover:bg-primary border border-primary/30 hover:border-primary px-5 py-2.5 rounded-xl text-primary hover:text-black font-semibold tracking-wide text-xs transition-all duration-300 uppercase shadow-primary-sm hover:shadow-primary-md shrink-0"
         >
           Finalize Room
         </button>
@@ -181,10 +181,10 @@ function AdminRoomDashboard({ room, onBack }: { room: Room; onBack: () => void }
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-white/[0.06] mb-8 overflow-x-auto">
-        <button onClick={() => setActiveTab("challenges")} className={`whitespace-nowrap px-6 py-3 font-semibold tracking-wide text-sm transition-all duration-200 relative rounded-t-xl ${activeTab === "challenges" ? "text-black bg-[#ffcc00]" : "text-white/35 hover:text-white/60 hover:bg-white/[0.03]"}`}>
+        <button onClick={() => setActiveTab("challenges")} className={`whitespace-nowrap px-6 py-3 font-semibold tracking-wide text-sm transition-all duration-200 relative rounded-t-xl ${activeTab === "challenges" ? "text-black bg-primary" : "text-white/35 hover:text-white/60 hover:bg-white/[0.03]"}`}>
           Mission Control
         </button>
-        <button onClick={() => setActiveTab("points")} className={`whitespace-nowrap px-6 py-3 font-semibold tracking-wide text-sm transition-all duration-200 relative rounded-t-xl ${activeTab === "points" ? "text-black bg-[#ffcc00]" : "text-white/35 hover:text-white/60 hover:bg-white/[0.03]"}`}>
+        <button onClick={() => setActiveTab("points")} className={`whitespace-nowrap px-6 py-3 font-semibold tracking-wide text-sm transition-all duration-200 relative rounded-t-xl ${activeTab === "points" ? "text-black bg-primary" : "text-white/35 hover:text-white/60 hover:bg-white/[0.03]"}`}>
           Room Leaderboard
         </button>
       </div>

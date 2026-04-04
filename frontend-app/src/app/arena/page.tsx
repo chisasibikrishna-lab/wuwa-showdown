@@ -137,9 +137,9 @@ export default function ArenaPage() {
       <div className="min-h-screen relative flex flex-col selection:bg-white/20 overflow-x-hidden">
         <TopNavbar />
         <div className="flex-1 flex items-center justify-center p-4">
-          <div className="flex flex-col items-center justify-center py-16 px-10 border border-[#ffcc00]/15 bg-[#ffcc00]/[0.02] rounded-2xl w-full max-w-md shadow-xl backdrop-blur-sm relative overflow-hidden text-center">
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#ffcc00] to-transparent opacity-60" />
-            <div className="w-14 h-14 rounded-full border-[3px] border-[#ffcc00]/20 border-t-[#ffcc00] animate-spin mb-6" />
+          <div className="flex flex-col items-center justify-center py-16 px-10 border border-primary/15 bg-primary/[0.02] rounded-2xl w-full max-w-md shadow-xl backdrop-blur-sm relative overflow-hidden text-center">
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-60" />
+            <div className="w-14 h-14 rounded-full border-[3px] border-primary/20 border-t-primary animate-spin mb-6" />
             <h2 className="text-2xl text-white font-semibold tracking-tight mb-2">{isPending ? 'Awaiting Approval' : 'Connecting...'}</h2>
             <p className="text-white/40 text-sm max-w-xs leading-relaxed">
               {isPending
@@ -149,7 +149,7 @@ export default function ArenaPage() {
             </p>
             <div className="mt-6 bg-white/[0.03] border border-white/[0.06] px-4 py-2 rounded-lg">
               <span className="text-white/30 text-xs font-medium tracking-wide">Room: </span>
-              <span className="text-[#ffcc00] font-mono font-semibold text-sm tracking-[0.15em]">{room.code}</span>
+              <span className="text-primary font-mono font-semibold text-sm tracking-[0.15em]">{room.code}</span>
             </div>
           </div>
         </div>
@@ -164,13 +164,13 @@ export default function ArenaPage() {
 
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 flex flex-col items-center">
         {/* Header HUD */}
-        <div className="w-full max-w-5xl mt-[6vh] lg:mt-[10vh] flex flex-col sm:flex-row justify-between items-center bg-black/40 border border-[#ffcc00]/20 px-6 sm:px-8 py-5 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl mb-5 gap-4 sm:gap-0 transition-all z-20">
+        <div className="w-full max-w-5xl mt-[6vh] lg:mt-[10vh] flex flex-col sm:flex-row justify-between items-center bg-black/40 border border-primary/20 px-6 sm:px-8 py-5 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl mb-5 gap-4 sm:gap-0 transition-all z-20">
           <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={myPlayer.avatar} alt="Profile" className="w-11 h-11 rounded-full border border-[#ffcc00]/30 shadow-[0_0_12px_rgba(255,204,0,0.15)]" />
+            <img src={myPlayer.avatar} alt="Profile" className="w-11 h-11 rounded-full border border-primary/30 shadow-primary-xs" />
             <div>
               <div className="text-white font-semibold tracking-tight text-lg">{myPlayer.name}</div>
-              <div className="text-[#ffcc00] font-mono text-xs tracking-wide mt-0.5">TOTAL PTS: <span className="font-bold">{myPlayer.roomScore}</span></div>
+              <div className="text-primary font-mono text-xs tracking-wide mt-0.5">TOTAL PTS: <span className="font-bold">{myPlayer.roomScore}</span></div>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -183,7 +183,7 @@ export default function ArenaPage() {
               </button>
             )}
             <div className="hidden sm:flex flex-col items-end justify-center">
-              <div className="bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-lg font-mono text-[#ffcc00] font-semibold tracking-[0.15em] text-sm">{room.code}</div>
+              <div className="bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 rounded-lg font-mono text-primary font-semibold tracking-[0.15em] text-sm">{room.code}</div>
             </div>
           </div>
         </div>
@@ -212,11 +212,11 @@ export default function ArenaPage() {
             </div>
 
             {/* Right Panel: Tac-Map */}
-            <div className="lg:col-span-8 flex flex-col h-[60vh] lg:h-auto lg:min-h-[700px] bg-black/40 border border-[#ffcc00]/20 rounded-3xl p-3 shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl relative order-1 lg:order-2">
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none bg-black/80 backdrop-blur-xl border border-[#ffcc00]/20 px-5 py-2 rounded-full shadow-xl">
+            <div className="lg:col-span-8 flex flex-col h-[60vh] lg:h-auto lg:min-h-[700px] bg-black/40 border border-primary/20 rounded-3xl p-3 shadow-[0_0_40px_rgba(0,0,0,0.4)] backdrop-blur-2xl relative order-1 lg:order-2">
+              <div className="absolute top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none bg-black/80 backdrop-blur-xl border border-primary/20 px-5 py-2 rounded-full shadow-xl">
                 <span className="text-white font-medium tracking-wide text-sm flex items-center gap-2 whitespace-nowrap">
-                  <MapPin size={16} className="text-[#ffcc00]" />
-                  <span className="text-[#ffcc00]">Target Area</span> {myResult ? "— Locked" : "— Engage"}
+                  <MapPin size={16} className="text-primary" />
+                  <span className="text-primary">Target Area</span> {myResult ? "— Locked" : "— Engage"}
                 </span>
               </div>
               <div className="w-full h-full rounded-xl overflow-hidden border border-white/[0.04] bg-[#053446ff] relative shadow-inner">

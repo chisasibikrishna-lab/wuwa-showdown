@@ -102,9 +102,9 @@ export default function DoubleEliminationBracket({
       {grandMatches.length > 0 && (
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#ffcc00]/30 to-transparent" />
-            <h3 className="text-sm font-bold uppercase tracking-widest text-[#ffcc00]">Grand Final</h3>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#ffcc00]/30 to-transparent" />
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            <h3 className="text-sm font-bold uppercase tracking-widest text-primary">Grand Final</h3>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
           </div>
           <div className="flex gap-12 justify-center py-4">
             {grandMatches
