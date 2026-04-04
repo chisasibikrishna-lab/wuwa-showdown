@@ -76,7 +76,7 @@ export default function TopNavbar() {
 
   return (
     <div className={`w-full flex justify-start z-50 fixed top-0 left-0 right-0 pointer-events-none ${rajdhani.className}`}>
-      <div className="relative h-14 w-full max-w-[1000px] pointer-events-auto">
+      <div className="relative h-14 w-full max-w-[1100px] pointer-events-auto">
         {/* Glassmorphism Background with Slanted Right Edge */}
         <div
           className="absolute inset-0 bg-[#161922]/90 backdrop-blur-md border-t border-b border-white/[0.04]"
