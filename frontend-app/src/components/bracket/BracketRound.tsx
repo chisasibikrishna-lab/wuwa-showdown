@@ -42,7 +42,7 @@ export default function BracketRound({
       </div>
 
       {/* Matches */}
-      <div className="flex flex-col justify-around flex-1 gap-4" style={{ minHeight: 0 }}>
+      <div className="flex flex-col justify-around flex-1 gap-8" style={{ minHeight: 0 }}>
         {sorted.map(match => (
           <div key={match.matchId} className="flex items-center">
             <BracketMatch

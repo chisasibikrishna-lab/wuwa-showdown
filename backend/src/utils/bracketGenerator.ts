@@ -13,6 +13,7 @@ export interface Match {
   winnerSeed: number | null;
   score1: number;
   score2: number;
+  venue: string | null;
   status: "pending" | "active" | "completed" | "bye";
 }
 
@@ -55,9 +56,11 @@ function createMatch(
   position: number,
   bracket: Match["bracket"],
   p1: number | null,
-  p2: number | null
+  p2: number | null,
+  venues: string[]
 ): Match {
   const isBye = (p1 !== null && p2 === null) || (p1 === null && p2 !== null);
+  const venue = venues.length > 0 && !isBye ? venues[Math.floor(Math.random() * venues.length)] : null;
   return {
     matchId,
     round,
@@ -68,11 +71,12 @@ function createMatch(
     winnerSeed: isBye ? (p1 ?? p2) : null,
     score1: 0,
     score2: 0,
+    venue,
     status: isBye ? "bye" : "pending",
   };
 }
 
-export function generateSingleElimination(participants: Participant[], randomize: boolean): Match[] {
+export function generateSingleElimination(participants: Participant[], randomize: boolean, venues: string[] = []): Match[] {
   const count = participants.length;
   if (count < 2) return [];
 
@@ -98,14 +102,14 @@ export function generateSingleElimination(participants: Participant[], randomize
     const seed2 = seedOrder[pos * 2 + 1];
     const p1 = seedMap.get(seed1) ? seed1 : null;
     const p2 = seedMap.get(seed2) ? seed2 : null;
-    matches.push(createMatch(`W-R0-M${pos}`, 0, pos, "winners", p1, p2));
+    matches.push(createMatch(`W-R0-M${pos}`, 0, pos, "winners", p1, p2, venues));
   }
 
   // Generate subsequent rounds (empty, will be filled as winners advance)
   for (let round = 1; round < totalRounds; round++) {
     const matchCount = bracketSize / Math.pow(2, round + 1);
     for (let pos = 0; pos < matchCount; pos++) {
-      matches.push(createMatch(`W-R${round}-M${pos}`, round, pos, "winners", null, null));
+      matches.push(createMatch(`W-R${round}-M${pos}`, round, pos, "winners", null, null, venues));
     }
   }
 
@@ -115,7 +119,7 @@ export function generateSingleElimination(participants: Participant[], randomize
   return matches;
 }
 
-export function generateDoubleElimination(participants: Participant[], randomize: boolean): Match[] {
+export function generateDoubleElimination(participants: Participant[], randomize: boolean, venues: string[] = []): Match[] {
   const count = participants.length;
   if (count < 2) return [];
 
@@ -123,7 +127,7 @@ export function generateDoubleElimination(participants: Participant[], randomize
   const winnersRounds = Math.log2(bracketSize);
 
   // Generate winners bracket (same as single elimination)
-  const matches = generateSingleElimination(participants, randomize);
+  const matches = generateSingleElimination(participants, randomize, venues);
 
   // Generate losers bracket
   // Losers bracket has (winnersRounds - 1) * 2 rounds
@@ -139,14 +143,14 @@ export function generateDoubleElimination(participants: Participant[], randomize
     const matchCount = Math.max(1, fullSize / Math.pow(2, halvings));
 
     for (let pos = 0; pos < matchCount; pos++) {
-      matches.push(createMatch(`L-R${round}-M${pos}`, round, pos, "losers", null, null));
+      matches.push(createMatch(`L-R${round}-M${pos}`, round, pos, "losers", null, null, venues));
     }
   }
 
   // Grand final
-  matches.push(createMatch("GF-M0", 0, 0, "grand", null, null));
+  matches.push(createMatch("GF-M0", 0, 0, "grand", null, null, venues));
   // Grand final reset (if losers bracket winner wins)
-  matches.push(createMatch("GF-M1", 1, 0, "grand", null, null));
+  matches.push(createMatch("GF-M1", 1, 0, "grand", null, null, venues));
 
   return matches;
 }

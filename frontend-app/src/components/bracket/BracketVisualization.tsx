@@ -9,10 +9,11 @@ interface BracketVisualizationProps {
   isAdmin: boolean;
   onSelectWinner: (matchId: string, winnerSeed: number, score1?: number, score2?: number) => void;
   onUndoWinner: (matchId: string) => void;
+  compact?: boolean;
 }
 
 export default function BracketVisualization({
-  bracket, isAdmin, onSelectWinner, onUndoWinner,
+  bracket, isAdmin, onSelectWinner, onUndoWinner, compact,
 }: BracketVisualizationProps) {
   if (bracket.matches.length === 0) {
     return (
@@ -24,7 +25,7 @@ export default function BracketVisualization({
   }
 
   return (
-    <div className="overflow-x-auto overflow-y-visible pb-6">
+    <div className={compact ? "" : "overflow-x-auto overflow-y-visible pb-6"}>
       {bracket.type === "single" ? (
         <SingleEliminationBracket
           matches={bracket.matches}

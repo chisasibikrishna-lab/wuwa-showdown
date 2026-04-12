@@ -11,6 +11,7 @@ import {
   undoMatchWinner,
   resetBracket,
   deleteBracket,
+  setMatchVenue,
 } from "../controllers/bracketController";
 
 const router = Router();
@@ -34,6 +35,7 @@ router.put("/:id", authMiddleware, updateBracket);
 router.post("/:id/generate", authMiddleware, generateBracket);
 router.put("/:id/matches/:matchId/winner", authMiddleware, setMatchWinner);
 router.put("/:id/matches/:matchId/undo", authMiddleware, undoMatchWinner);
+router.put("/:id/matches/:matchId/venue", authMiddleware, setMatchVenue);
 router.post("/:id/reset", authMiddleware, resetBracket);
 router.delete("/:id", authMiddleware, deleteBracket);
 

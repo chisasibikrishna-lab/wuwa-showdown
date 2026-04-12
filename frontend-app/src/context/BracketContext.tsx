@@ -18,6 +18,7 @@ export interface BracketMatch {
   winnerSeed: number | null;
   score1: number;
   score2: number;
+  venue: string | null;
   status: "pending" | "active" | "completed" | "bye";
 }
 
@@ -31,6 +32,7 @@ export interface BracketData {
   shareCode: string;
   participants: BracketParticipant[];
   randomizeSeeding: boolean;
+  venues: string[];
   matches: BracketMatch[];
   champion: string | null;
   createdAt: string;
@@ -43,10 +45,11 @@ interface BracketContextValue {
   activeBracket: BracketData | null;
   fetchBrackets: () => Promise<void>;
   fetchBracket: (shareCode: string) => Promise<BracketData | null>;
-  createBracket: (data: { name: string; type: string; participants: string[]; randomizeSeeding: boolean }) => Promise<BracketData | null>;
-  updateBracket: (id: string, data: { name?: string; type?: string; participants?: string[]; randomizeSeeding?: boolean }) => Promise<BracketData | null>;
+  createBracket: (data: { name: string; type: string; participants: string[]; randomizeSeeding: boolean; venues?: string[] }) => Promise<BracketData | null>;
+  updateBracket: (id: string, data: { name?: string; type?: string; participants?: string[]; randomizeSeeding?: boolean; venues?: string[] }) => Promise<BracketData | null>;
   generateBracket: (id: string) => Promise<BracketData | null>;
   setMatchWinner: (id: string, matchId: string, winnerSeed: number, score1?: number, score2?: number) => Promise<BracketData | null>;
+  setMatchVenue: (id: string, matchId: string, venue: string | null) => Promise<BracketData | null>;
   undoMatchWinner: (id: string, matchId: string) => Promise<BracketData | null>;
   resetBracket: (id: string) => Promise<BracketData | null>;
   deleteBracket: (id: string) => Promise<boolean>;
@@ -196,6 +199,25 @@ export function BracketProvider({ children }: { children: ReactNode }) {
     }
   }, [token, headers]);
 
+  const setMatchVenue = useCallback(async (id: string, matchId: string, venue: string | null): Promise<BracketData | null> => {
+    if (!token) return null;
+    try {
+      const res = await fetch(`${BASE}/api/brackets/${id}/matches/${matchId}/venue`, {
+        method: "PUT",
+        headers: headers(),
+        body: JSON.stringify({ venue }),
+      });
+      if (!res.ok) return null;
+      const bracket = await res.json();
+      setActiveBracket(bracket);
+      // Also emit via socket for real-time
+      bracketSocket?.emit("BRACKET_SET_VENUE", { bracketId: id, matchId, venue });
+      return bracket;
+    } catch {
+      return null;
+    }
+  }, [token, headers]);
+
   const undoMatchWinner = useCallback(async (id: string, matchId: string): Promise<BracketData | null> => {
     if (!token) return null;
     try {
@@ -259,7 +281,7 @@ export function BracketProvider({ children }: { children: ReactNode }) {
     <BracketContext.Provider value={{
       brackets, loadingBrackets, activeBracket,
       fetchBrackets, fetchBracket, createBracket, updateBracket,
-      generateBracket, setMatchWinner, undoMatchWinner,
+      generateBracket, setMatchWinner, undoMatchWinner, setMatchVenue,
       resetBracket, deleteBracket, joinBracketRoom, leaveBracketRoom,
       setActiveBracket,
     }}>

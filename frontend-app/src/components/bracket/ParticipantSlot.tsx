@@ -88,19 +88,6 @@ export default function ParticipantSlot({
         {isBye ? "BYE" : participant?.name || "TBD"}
       </span>
 
-      {/* Score badge */}
-      {score !== undefined && !isBye && (
-        <span className={`
-          text-xs font-bold px-1.5 py-0.5 rounded min-w-[22px] text-center shrink-0
-          ${isWinner
-            ? "bg-primary/20 text-primary"
-            : "bg-zinc-800 text-zinc-400"
-          }
-        `}>
-          {score}
-        </span>
-      )}
-
       {/* Winner dot */}
       {isWinner && (
         <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-primary-xs shrink-0" />

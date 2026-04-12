@@ -15,6 +15,7 @@ const matchSchema = new mongoose.Schema({
   winnerSeed: { type: Number, default: null },
   score1: { type: Number, default: 0 },
   score2: { type: Number, default: 0 },
+  venue: { type: String, default: null },
   status: { type: String, enum: ["pending", "active", "completed", "bye"], default: "pending" },
 }, { _id: false });
 
@@ -27,6 +28,7 @@ const bracketSchema = new mongoose.Schema({
   shareCode: { type: String, unique: true, required: true },
   participants: [participantSchema],
   randomizeSeeding: { type: Boolean, default: false },
+  venues: { type: [String], default: [] },
   matches: [matchSchema],
   champion: { type: String, default: null },
 }, { timestamps: true });

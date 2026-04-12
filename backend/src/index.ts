@@ -316,6 +316,26 @@ io.on("connection", async (socket: Socket) => {
     }
   });
 
+  socket.on("BRACKET_SET_VENUE", async ({ bracketId, matchId, venue }: { bracketId: string; matchId: string; venue: string | null }) => {
+    if (socket.data.user?.role !== "admin") return;
+    try {
+      const bracket = await Bracket.findById(bracketId);
+      if (!bracket) return;
+
+      const matches = bracket.matches as any[];
+      const match = matches.find((m: any) => m.matchId === matchId);
+      if (!match) return;
+
+      match.venue = venue;
+      bracket.markModified("matches");
+      await bracket.save();
+      
+      io.to(`bracket:${bracket.shareCode}`).emit("BRACKET_UPDATE", bracket);
+    } catch (e) {
+      console.error("[Bracket Socket] Set venue error:", e);
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log(`[Socket] Operator disconnected: ${socket.id}`);
   });

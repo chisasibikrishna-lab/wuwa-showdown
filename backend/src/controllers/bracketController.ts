@@ -13,7 +13,7 @@ import {
 export async function createBracket(req: Request, res: Response) {
   try {
     const user = (req as any).user;
-    const { name, type, participants, randomizeSeeding } = req.body;
+    const { name, type, participants, randomizeSeeding, venues } = req.body;
 
     if (!name || !type) return res.status(400).json({ error: "Name and type required" });
     if (!["single", "double"].includes(type)) return res.status(400).json({ error: "Type must be single or double" });
@@ -39,6 +39,7 @@ export async function createBracket(req: Request, res: Response) {
       shareCode,
       participants: parsedParticipants,
       randomizeSeeding: randomizeSeeding || false,
+      venues: Array.isArray(venues) ? venues.map((v: string) => v.trim()).filter(Boolean) : [],
       matches: [],
     });
 
@@ -76,7 +77,7 @@ export async function getBracket(req: Request, res: Response) {
   }
 }
 
-// PUT /api/brackets/:id — update draft bracket
+// PUT /api/brackets/:id — update bracket
 export async function updateBracket(req: Request, res: Response) {
   try {
     const user = (req as any).user;
@@ -85,11 +86,18 @@ export async function updateBracket(req: Request, res: Response) {
     if (bracket.creatorId.toString() !== user.id && user.role !== "admin") {
       return res.status(403).json({ error: "Forbidden" });
     }
-    if (bracket.status !== "draft") {
+
+    const { name, type, participants, randomizeSeeding, venues } = req.body;
+
+    // Venues can be updated regardless of bracket status
+    if (Array.isArray(venues)) bracket.venues = venues.map((v: string) => v.trim()).filter(Boolean);
+
+    // Other fields can only be edited in draft status
+    const hasDraftOnlyChanges = name || type || participants || randomizeSeeding !== undefined;
+    if (hasDraftOnlyChanges && bracket.status !== "draft") {
       return res.status(400).json({ error: "Can only edit draft brackets" });
     }
 
-    const { name, type, participants, randomizeSeeding } = req.body;
     if (name) bracket.name = name;
     if (type && ["single", "double"].includes(type)) bracket.type = type;
     if (randomizeSeeding !== undefined) bracket.randomizeSeeding = randomizeSeeding;
@@ -127,8 +135,8 @@ export async function generateBracket(req: Request, res: Response) {
     }));
 
     const matches = bracket.type === "double"
-      ? generateDoubleElimination(participants, bracket.randomizeSeeding)
-      : generateSingleElimination(participants, bracket.randomizeSeeding);
+      ? generateDoubleElimination(participants, bracket.randomizeSeeding, bracket.venues)
+      : generateSingleElimination(participants, bracket.randomizeSeeding, bracket.venues);
 
     bracket.matches = matches as any;
     bracket.status = "active";
@@ -253,6 +261,34 @@ export async function undoMatchWinner(req: Request, res: Response) {
 
     return res.json(bracket);
   } catch (e) {
+    return res.status(500).json({ error: "Server error" });
+  }
+}
+
+// PUT /api/brackets/:id/matches/:matchId/venue — set match venue
+export async function setMatchVenue(req: Request, res: Response) {
+  try {
+    const user = (req as any).user;
+    const bracket = await Bracket.findById(req.params.id);
+    if (!bracket) return res.status(404).json({ error: "Bracket not found" });
+    if (bracket.creatorId.toString() !== user.id && user.role !== "admin") {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    const { venue } = req.body;
+    const matchId = String(req.params.matchId);
+    const matches = bracket.matches as any[];
+    const match = matches.find((m: any) => m.matchId === matchId);
+
+    if (!match) return res.status(404).json({ error: "Match not found" });
+
+    match.venue = venue || null;
+    bracket.markModified("matches");
+    await bracket.save();
+
+    return res.json(bracket);
+  } catch (e) {
+    console.error("[Bracket] Set venue error:", e);
     return res.status(500).json({ error: "Server error" });
   }
 }

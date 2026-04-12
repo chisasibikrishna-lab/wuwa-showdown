@@ -12,6 +12,7 @@ export default function CreateBracketPage() {
   const [name, setName] = useState("");
   const [type, setType] = useState<"single" | "double">("single");
   const [participantsText, setParticipantsText] = useState("");
+  const [venuesText, setVenuesText] = useState("");
   const [randomize, setRandomize] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,6 +20,11 @@ export default function CreateBracketPage() {
   const participants = participantsText
     .split("\n")
     .map(p => p.trim())
+    .filter(Boolean);
+
+  const venues = venuesText
+    .split("\n")
+    .map(v => v.trim())
     .filter(Boolean);
 
   const participantCount = participants.length;
@@ -35,6 +41,7 @@ export default function CreateBracketPage() {
         type,
         participants,
         randomizeSeeding: randomize,
+        venues,
       });
 
       if (!bracket) {
@@ -153,6 +160,28 @@ export default function CreateBracketPage() {
           {participantCount > 128 && (
             <p className="text-red-400 text-xs mt-1.5">Maximum 128 participants</p>
           )}
+        </div>
+
+        {/* Venues / Maps */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-zinc-300">
+              Venues / Maps
+              <span className="text-zinc-500 font-normal ml-1">(Optional, one per line)</span>
+            </label>
+            <span className={`text-xs font-mono text-zinc-500`}>
+              {venues.length} map{venues.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+          <textarea
+            value={venuesText}
+            onChange={e => setVenuesText(e.target.value)}
+            rows={3}
+            placeholder={"Final Destination\nSmashville\nBattlefield"}
+            className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-white/[0.08] text-white
+                       placeholder-zinc-700 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20
+                       transition-all text-sm resize-y leading-relaxed"
+          />
         </div>
 
         {/* Randomize Toggle */}

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { BracketMatch as MatchType, BracketParticipant } from "@/context/BracketContext";
+import { BracketMatch as MatchType, BracketParticipant, useBracket } from "@/context/BracketContext";
 import ParticipantSlot from "./ParticipantSlot";
 
 interface BracketMatchProps {
@@ -14,6 +14,9 @@ interface BracketMatchProps {
 export default function BracketMatch({
   match, participants, isAdmin, onSelectWinner, onUndoWinner,
 }: BracketMatchProps) {
+  const { activeBracket, setMatchVenue } = useBracket() || {};
+  const venues = activeBracket?.venues || [];
+
   const p1 = participants.find(p => p.seed === match.participant1Seed) || null;
   const p2 = participants.find(p => p.seed === match.participant2Seed) || null;
 
@@ -31,6 +34,10 @@ export default function BracketMatch({
   const [score2, setScore2] = useState("");
   const popoverRef = useRef<HTMLDivElement>(null);
 
+  // Venue popover state
+  const [showVenueSelect, setShowVenueSelect] = useState(false);
+  const venuePopoverRef = useRef<HTMLDivElement>(null);
+
   // Close on click outside
   useEffect(() => {
     if (!showScoreInput) return;
@@ -45,6 +52,17 @@ export default function BracketMatch({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [showScoreInput]);
+
+  useEffect(() => {
+    if (!showVenueSelect) return;
+    const handler = (e: MouseEvent) => {
+      if (venuePopoverRef.current && !venuePopoverRef.current.contains(e.target as Node)) {
+        setShowVenueSelect(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showVenueSelect]);
 
   const handleSlotClick = (clickedSeed: number | null) => {
     if (!clickedSeed) return;
@@ -81,7 +99,7 @@ export default function BracketMatch({
       data-match-id={match.matchId}
       className={`
         relative w-52 rounded-xl overflow-visible border transition-all duration-300
-        ${showScoreInput ? "z-[100]" : "z-10"}
+        ${(showScoreInput || showVenueSelect) ? "z-[100]" : "z-10"}
         ${isCompleted
           ? "bg-[#0a0a0c]/60 backdrop-blur-xl border-white/[0.08]"
           : isReady
@@ -125,6 +143,57 @@ export default function BracketMatch({
           />
         </div>
       </div>
+
+      {/* Venue Indicator */}
+      {(match.venue || (isAdmin && venues.length > 0)) && (
+        <div 
+          className={`absolute -bottom-3 left-1/2 -translate-x-1/2 z-[25] flex justify-center ${isAdmin ? 'cursor-pointer hover:opacity-100 opacity-90' : 'opacity-80'} transition-opacity`}
+          onClick={() => isAdmin && setShowVenueSelect(true)}
+        >
+          <div className="bg-[#111116] border border-white/[0.15] rounded-full px-3 py-0.5 text-[9px] text-zinc-300 flex items-center shadow-lg font-medium tracking-wide whitespace-nowrap">
+            <span className="text-primary/70 mr-1.5 opacity-80 text-[10px]">📍</span>
+            <span>{match.venue || "Select Map"}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Venue Select Popover */}
+      {showVenueSelect && isAdmin && (
+        <div
+          ref={venuePopoverRef}
+          className="absolute z-[110] left-1/2 top-full mt-4 -translate-x-1/2 w-48
+                     bg-[#111116] border border-white/[0.15] rounded-xl
+                     shadow-[0_8px_40px_rgba(0,0,0,0.8)] p-2 backdrop-blur-xl"
+        >
+          <div className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-2 px-2 flex justify-between items-center">
+            Set Map / Venue
+            <button onClick={() => setShowVenueSelect(false)} className="text-zinc-500 hover:text-white p-1 absolute right-2 top-2 rounded-md hover:bg-white/10 transition-colors">✕</button>
+          </div>
+          <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+            <button
+              onClick={() => {
+                setMatchVenue?.(activeBracket!._id, match.matchId, null);
+                setShowVenueSelect(false);
+              }}
+              className={`text-left px-3 py-1.5 rounded-lg text-xs transition-colors ${!match.venue ? 'bg-primary/20 text-primary' : 'text-zinc-400 hover:bg-white/5'}`}
+            >
+              No Map
+            </button>
+            {venues.map(v => (
+              <button
+                key={v}
+                onClick={() => {
+                  setMatchVenue?.(activeBracket!._id, match.matchId, v);
+                  setShowVenueSelect(false);
+                }}
+                className={`text-left px-3 py-1.5 rounded-lg text-xs transition-colors truncate ${match.venue === v ? 'bg-primary/20 text-primary' : 'text-zinc-300 hover:bg-white/5'}`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Score Input Popover */}
       {showScoreInput && (
